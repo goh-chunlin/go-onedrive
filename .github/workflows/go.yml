@@ -28,12 +28,12 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-        
-    - name: Go to OneDrive source directory
-      run: cd onedrive
+      working-directory: onedrive
 
     - name: Build
       run: go build -v .
+      working-directory: onedrive
 
     - name: Test
       run: go test -v .
+      working-directory: onedrive
