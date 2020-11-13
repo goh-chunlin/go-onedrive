@@ -1,0 +1,129 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/drive/items('0000000000000001')/children",
+    "@odata.count": 2,
+    "value": [
+        {
+            "createdDateTime": "2020-11-06T16:06:03.94Z",
+            "cTag": "adDoxRjNBOUZDRDU3ODc4OUREITEzMjE5LjYzNzQwMjc4NjczNjQzMDAwMA",
+            "eTag": "aMUYzQTlGQ0Q1Nzg3ODlERCExMzIxOS4y",
+            "id": "1F3A9FCD578789DD!13219",
+            "lastModifiedDateTime": "2020-11-06T16:57:53.643Z",
+            "name": "AlbumImages",
+            "size": 19135783,
+            "webUrl": "https://1drv.ms/f/000001",
+            "reactions": {
+                "commentCount": 0
+            },
+            "createdBy": {
+                "application": {
+                    "displayName": "MSOffice15",
+                    "id": "00000000004"
+                },
+                "device": {
+                    "id": "00000000003"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                },
+                "oneDriveSync": {
+                    "@odata.type": "#microsoft.graph.identity",
+                    "id": "ef240ac9-30b7-4482-a273-105b5a62e451"
+                }
+            },
+            "lastModifiedBy": {
+                "application": {
+                    "displayName": "OneDrive website",
+                    "id": "00000000005"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                }
+            },
+            "parentReference": {
+                "driveId": "00000000003",
+                "driveType": "personal",
+                "id": "1F3A9FCD578789DD!000",
+                "name": "Music",
+                "path": "/drive/root:/Music"
+            },
+            "fileSystemInfo": {
+                "createdDateTime": "2020-11-06T16:06:02Z",
+                "lastModifiedDateTime": "2020-11-06T16:08:30.73Z"
+            },
+            "folder": {
+                "childCount": 21,
+                "view": {
+                    "viewType": "thumbnails",
+                    "sortBy": "takenOrCreatedDateTime",
+                    "sortOrder": "ascending"
+                }
+            }
+        },
+        {
+            "@microsoft.graph.downloadUrl": "https://public.by.files.1drv.com/y4mFXQDo_lDQCiQy-5W4bsg5rovTLQiKlnNAlK5lAFzgBHLctzjjaOn7zT44T7ObhymLeeun2dXOu2Ml8pz5VrCeVhpSIeborhdm2_1An2xDNf3tBV6GyM2Jbo4snlXQvDGMlQDuliorvB_M0J8uypk4BChIwPpNxGeoxjBWgOXp2EqDwA8op0B4_IpWyR09i6vHuJpxaJlkyQTu3vSHc5RfXsv8jmb0nYAKw9QeKP9Ztc",
+            "createdDateTime": "2020-10-27T13:42:23.28Z",
+            "cTag": "aYzoxRjNBOUZDRDU3ODc4OUREITEzMTY1LjI1Nw",
+            "description": "ThanksAT",
+            "eTag": "aMUYzQTlGQ0Q1Nzg3ODlERCExMzE2NS4y",
+            "id": "1F3A9FCD578789DD!13165",
+            "lastModifiedDateTime": "2020-10-27T13:42:42.087Z",
+            "name": "AttackOnTitan-ThanksAT.mp3",
+            "size": 5774636,
+            "webUrl": "https://1drv.ms/u/s!AN2Jh1fNnzof5m0",
+            "reactions": {
+                "commentCount": 0
+            },
+            "createdBy": {
+                "application": {
+                    "displayName": "OneDrive",
+                    "id": "00000000006"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                }
+            },
+            "lastModifiedBy": {
+                "application": {
+                    "displayName": "OneDrive",
+                    "id": "00000000006"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                }
+            },
+            "parentReference": {
+                "driveId": "00000000003",
+                "driveType": "personal",
+                "id": "1F3A9FCD578789DD!000",
+                "name": "Music",
+                "path": "/drive/root:/Music"
+            },
+            "audio": {
+                "album": "Music 001",
+                "albumArtist": "Artist 001",
+                "bitrate": 192,
+                "duration": 240430,
+                "hasDrm": false,
+                "isVariableBitrate": false,
+                "title": "Album 001",
+                "year": 2020
+            },
+            "file": {
+                "mimeType": "audio/mpeg",
+                "hashes": {
+                    "quickXorHash": "KsRWfXmpnaoXqUBrcgTQPlxcoGM=",
+                    "sha1Hash": "AA4A8B91E267AD8145BA44D89352CD0C08EFDB2A",
+                    "sha256Hash": "405BCC9D246EE6270C301221C77C527DCC8EFD6EC6F794964FFAFB844276BBB5"
+                }
+            },
+            "fileSystemInfo": {
+                "createdDateTime": "2020-10-27T13:42:23.28Z",
+                "lastModifiedDateTime": "2020-10-27T12:16:50.573Z"
+            }
+        }
+    ]
+}

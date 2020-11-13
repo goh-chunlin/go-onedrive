@@ -1,0 +1,11 @@
+{
+    "error": {
+        "code": "InvalidAuthenticationToken",
+        "message": "CompactToken validation failed with reason code: 80049228.",
+        "innerError": {
+            "date": "2020-11-13T04:27:35",
+            "request-id": "00000000-0000-0000-0000-000000000001",
+            "client-request-id": "00000000-0000-0000-0000-000000000002"
+        }
+    }
+}
