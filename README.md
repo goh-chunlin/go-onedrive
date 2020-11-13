@@ -1,4 +1,7 @@
 # go-onedrive
+
+![Test Status](https://github.com/goh-chunlin/go-onedrive/workflows/Go/badge.svg?branch=main)
+
 go-onedrive is a Go client library for accessing the [Microsoft OneDrive REST API](https://docs.microsoft.com/en-us/onedrive/developer/rest-api/?view=odsp-graph-online).
 
 This project is inspired by a few open-source projects, especially the [go-github project from Google](https://github.com/google/go-github).
