@@ -34,8 +34,6 @@ type Client struct {
 
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
-	AccessToken string
-
 	// Services used for talking to different parts of the OneDrive API.
 	Drives     *DrivesService
 	DriveItems *DriveItemsService
@@ -77,9 +75,6 @@ func (c *Client) NewRequest(method, relativeURL string) (*http.Request, error) {
 	// Create a new request using http
 	req, err := http.NewRequest(method, apiUrl.String(), nil)
 
-	// add authorization header to the req
-	req.Header.Add("Authorization", "Bearer "+c.AccessToken)
-
 	return req, nil
 }
 
@@ -120,14 +115,16 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 	}
 
 	responseBodyReader := bytes.NewReader(responseBody)
-
 	var oneDriveError *ErrorResponse
 	json.NewDecoder(responseBodyReader).Decode(&oneDriveError)
 	if oneDriveError.Error != nil {
 		return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message + " (" + oneDriveError.Error.InnerError.Date + ")")
 	}
 
-	return json.NewDecoder(responseBodyReader).Decode(target)
+	responseBodyReader = bytes.NewReader(responseBody)
+	err = json.NewDecoder(responseBodyReader).Decode(target)
+
+	return err
 }
 
 // sanitizeURL redacts the client_secret parameter from the URL which may be exposed to the user.
