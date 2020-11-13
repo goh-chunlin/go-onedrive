@@ -37,7 +37,7 @@ drives, err := onedrive.Drives.List(ctx)
 
 NOTE: Using the [context](https://godoc.org/context) package, one can easily pass cancelation signals and deadlines to various services of the client for handling a request. In case there is no context available, then `context.Background()` can be used as a starting point.
 
-### Authentication ###
+## Authentication ##
 
 The go-onedrive library does not directly handle authentication. Instead, when creating a new client, pass an `http.Client` that can handle authentication for you. The easiest and recommended way to do this is using the [oauth2](https://github.com/golang/oauth2)
 library.
