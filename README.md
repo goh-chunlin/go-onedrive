@@ -8,14 +8,11 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.buymeacoffee.com/chunlin)
 
-go-onedrive is a Go client library for accessing the [Microsoft OneDrive REST API](https://docs.microsoft.com/en-us/onedrive/developer/rest-api/?view=odsp-graph-online).
+go-onedrive is a Golang client library for accessing the [Microsoft OneDrive REST API](https://docs.microsoft.com/en-us/onedrive/developer/rest-api/?view=odsp-graph-online).
 
 This project is inspired by a few open-source projects, especially the [go-github project from Google](https://github.com/google/go-github).
 
-Currently, **go-onedrive requires Go version 1.15 or greater**.  go-onedrive tracks
-[Go's version support policy](https://golang.org/doc/devel/release.html#policy). I'll do my best not to break
-older versions of Go if we don't have to, but due to tooling constraints, we
-don't always test older versions.
+Currently, **go-onedrive requires Golang version 1.15 or greater**.  go-onedrive tracks [Golang version support policy](https://golang.org/doc/devel/release.html#policy). I'll do my best not to break older versions of Golang if I don't have to, but due to tooling constraints, I don't always test older versions.
 
 ## Usage ##
 
@@ -38,16 +35,11 @@ client := onedrive.NewClient(tc)
 drives, err := onedrive.Drives.List(ctx)
 ```
 
-NOTE: Using the [context](https://godoc.org/context) package, one can easily
-pass cancelation signals and deadlines to various services of the client for
-handling a request. In case there is no context available, then `context.Background()`
-can be used as a starting point.
+NOTE: Using the [context](https://godoc.org/context) package, one can easily pass cancelation signals and deadlines to various services of the client for handling a request. In case there is no context available, then `context.Background()` can be used as a starting point.
 
 ### Authentication ###
 
-The go-onedrive library does not directly handle authentication. Instead, when
-creating a new client, pass an `http.Client` that can handle authentication for
-you. The easiest and recommended way to do this is using the [oauth2](https://github.com/golang/oauth2)
+The go-onedrive library does not directly handle authentication. Instead, when creating a new client, pass an `http.Client` that can handle authentication for you. The easiest and recommended way to do this is using the [oauth2](https://github.com/golang/oauth2)
 library.
 
 Note that when using an authenticated Client, all calls made by the client will
@@ -58,9 +50,7 @@ See the [oauth2 docs](https://godoc.org/golang.org/x/oauth2) for complete instru
 
 ## Contributing ##
 
-This library is being initially developed as a library for my personal project, so API methods will likely be implemented 
-in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to 
-support the following features.
+This library is being initially developed as a library for my personal project, so API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
 - [ ] Drives
  - [x] Get Default Drive
