@@ -1,6 +1,12 @@
 # go-onedrive
 
+<div align="center">
+    <img src="https://gclstorage.blob.core.windows.net/images/go-onedrive-banner.png" />
+</div>
+
 ![Test Status](https://github.com/goh-chunlin/go-onedrive/workflows/Go/badge.svg?branch=main)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.buymeacoffee.com/chunlin)
 
 go-onedrive is a Go client library for accessing the [Microsoft OneDrive REST API](https://docs.microsoft.com/en-us/onedrive/developer/rest-api/?view=odsp-graph-online).
 
