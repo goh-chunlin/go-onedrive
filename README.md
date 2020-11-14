@@ -4,7 +4,7 @@
     <img src="https://gclstorage.blob.core.windows.net/images/go-onedrive-banner.png" />
 </div>
 
-![Test Status](https://github.com/goh-chunlin/go-onedrive/workflows/Go/badge.svg?branch=main)
+![Go Build](https://github.com/goh-chunlin/go-onedrive/workflows/Go%20Build/badge.svg?branch=main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.buymeacoffee.com/chunlin)
 
