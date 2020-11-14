@@ -50,27 +50,30 @@ See the [oauth2 docs](https://godoc.org/golang.org/x/oauth2) for complete instru
 
 ## Contributing ##
 
-This library is being initially developed as a library for my personal project, so API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
+This library is being initially developed as a library for my personal project as listed below.
+- [Lunar.Music.Web](https://github.com/goh-chunlin/Lunar.Music.Web).
+
+Hence, API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
 - [ ] Drives
- - [x] Get Default Drive
- - [ ] Get Drive
- - [x] List all available drives
+	- [x] Get Default Drive
+	- [ ] Get Drive
+	- [x] List all available drives
 - [ ] Items
- - [ ] Create
- 	- [ ] Create folder
- - [ ] Copy
- 	- [ ] Copy file/folder
- 	- [ ] Async job to track progress
- - [ ] Delete
- - [ ] Download
- - [x] List children
- - [ ] Search
- - [ ] Move
- - [ ] Upload
- 	- [ ] Simple item upload <100MB
- 	- [ ] Resumable item upload
- 	- [ ] Upload from URL
+	- [ ] Create
+	- [ ] Create folder
+	- [ ] Copy
+	- [ ] Copy file/folder
+	- [ ] Async job to track progress
+	- [ ] Delete
+	- [ ] Download
+	- [x] List children
+- [ ] Search
+- [ ] Move
+- [ ] Upload
+	- [ ] Simple item upload <100MB
+	- [ ] Resumable item upload
+	- [ ] Upload from URL
 
 ## Sensei Projects ##
 
