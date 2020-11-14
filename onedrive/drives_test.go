@@ -15,6 +15,48 @@ import (
 	"testing"
 )
 
+func TestDrivesService_Default_authenticatedUser(t *testing.T) {
+	client, mux, _, teardown := setup()
+
+	defer teardown()
+
+	mux.HandleFunc("/me/drive", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+
+		jsonData := getTestDataFromFile(t, "fake_defaultDrive.json")
+
+		fmt.Fprint(w, string(jsonData))
+	})
+
+	ctx := context.Background()
+	gotDefaultDrive, err := client.Drives.Default(ctx)
+	if err != nil {
+		t.Errorf("Drives.List returned error: %v", err)
+	}
+
+	jsonFile, err := os.Open("testdata/fake_defaultDrive.json")
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	defer jsonFile.Close()
+
+	comparedToData, err := ioutil.ReadAll(jsonFile)
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	var wantDefaultDrive *Drive
+	json.Unmarshal(comparedToData, &wantDefaultDrive)
+
+	if !reflect.DeepEqual(gotDefaultDrive, wantDefaultDrive) {
+		t.Errorf("Drives.Default returned %+v, want %+v", gotDefaultDrive, wantDefaultDrive)
+	}
+
+}
+
 func TestDrivesService_List_authenticatedUser(t *testing.T) {
 	client, mux, _, teardown := setup()
 
