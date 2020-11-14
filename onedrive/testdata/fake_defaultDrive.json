@@ -1,0 +1,21 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#drives/$entity",
+    "id": "0000000000000001",
+    "driveType": "personal",
+    "owner": {
+        "user": {
+            "displayName": "User Display Name",
+            "id": "0000000000000002"
+        }
+    },
+    "quota": {
+        "deleted": 1,
+        "remaining": 2000,
+        "state": "normal",
+        "total": 3000,
+        "used": 999,
+        "storagePlanInformation": {
+            "upgradeAvailable": true
+        }
+    }
+}
