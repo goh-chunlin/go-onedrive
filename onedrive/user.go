@@ -6,6 +6,6 @@ package onedrive
 
 // User represents an user in Microsoft Live.
 type User struct {
-	ID          string `json:"id"`
+	Id          string `json:"id"`
 	DisplayName string `json:"displayName"`
 }
