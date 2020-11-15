@@ -31,7 +31,7 @@ func TestDrivesService_Default_authenticatedUser(t *testing.T) {
 	ctx := context.Background()
 	gotDefaultDrive, err := client.Drives.Default(ctx)
 	if err != nil {
-		t.Errorf("Drives.List returned error: %v", err)
+		t.Errorf("Drives.Default returned error: %v", err)
 	}
 
 	jsonFile, err := os.Open("testdata/fake_defaultDrive.json")
