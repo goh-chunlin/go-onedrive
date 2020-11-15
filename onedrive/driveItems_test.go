@@ -56,3 +56,45 @@ func TestDriveItemsService_ListRoot_authenticatedUser(t *testing.T) {
 	}
 
 }
+
+func TestDriveItemsService_Get_authenticatedUser(t *testing.T) {
+	client, mux, _, teardown := setup()
+
+	defer teardown()
+
+	mux.HandleFunc("/me/drive/items/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+
+		jsonData := getTestDataFromFile(t, "fake_driveItem.json")
+
+		fmt.Fprint(w, string(jsonData))
+	})
+
+	ctx := context.Background()
+	gotDriveItem, err := client.DriveItems.Get(ctx, "1")
+	if err != nil {
+		t.Errorf("DriveItems.Get returned error: %v", err)
+	}
+
+	jsonFile, err := os.Open("testdata/fake_driveItem.json")
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	defer jsonFile.Close()
+
+	comparedToData, err := ioutil.ReadAll(jsonFile)
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	var wantDriveItem *DriveItem
+	json.Unmarshal(comparedToData, &wantDriveItem)
+
+	if !reflect.DeepEqual(gotDriveItem, wantDriveItem) {
+		t.Errorf("Drives.Item returned %+v, want %+v", gotDriveItem, wantDriveItem)
+	}
+
+}

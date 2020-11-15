@@ -4,7 +4,10 @@
 
 package onedrive
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 // DriveItemsService handles communication with the drive items related methods of the OneDrive API.
 //
@@ -42,7 +45,7 @@ type OneDriveImage struct {
 	Width  float64 `json:"width"`
 }
 
-// List the root items in the default drive of the authenticated user.
+// List the items of a folder in the default drive of the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/driveitem?view=odsp-graph-online
 func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriveDriveItemsResponse, error) {
@@ -63,4 +66,28 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 	}
 
 	return oneDriveResponse, nil
+}
+
+// Get an item in the default drive of the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_get?view=odsp-graph-online
+func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem, error) {
+	if itemId == "" {
+		return nil, errors.New("Please provide the Item ID of the item.")
+	}
+
+	apiURL := "me/drive/items/" + itemId
+
+	req, err := s.client.NewRequest("GET", apiURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var driveItem *DriveItem
+	err = s.client.Do(ctx, req, &driveItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return driveItem, nil
 }

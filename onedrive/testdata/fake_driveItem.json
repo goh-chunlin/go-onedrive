@@ -1,0 +1,24 @@
+{
+    "createdBy": {
+        "user": {
+            "id": "efee1b77-fb3b-4f65-99d6-274c11914d12",
+            "displayName": "Ryan Gregg"
+        }
+    },
+    "createdDateTime": "2016-03-21T20:01:37Z",
+    "cTag": "\"c:{86EB4C8E-D20D-46B9-AD41-23B8868DDA8A},0\"",
+    "eTag": "\"{86EB4C8E-D20D-46B9-AD41-23B8868DDA8A},1\"",
+    "folder": { "childCount": 120 },
+    "id": "01NKDM7HMOJTVYMDOSXFDK2QJDXCDI3WUK",
+    "lastModifiedBy": {
+        "user": {
+            "id": "efee1b77-fb3b-4f65-99d6-274c11914d12",
+            "displayName": "Ryan Gregg"
+        }
+    },
+    "lastModifiedDateTime": "2016-03-21T20:01:37Z",
+    "name": "OneDrive",
+    "root": { },
+    "size": 157286400,
+    "webUrl": "https://contoso-my.sharepoint.com/personal/rgregg_contoso_com/Documents"
+  }
