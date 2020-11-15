@@ -21,7 +21,7 @@ type OneDriveDrivesResponse struct {
 
 // Drive represents a OneDrive drive.
 type Drive struct {
-	ID        string      `json:"id"`
+	Id        string      `json:"id"`
 	DriveType string      `json:"driveType"`
 	Owner     *Owner      `json:"owner"`
 	Quota     *DriveQuota `json:"quota"`
