@@ -56,10 +56,11 @@ This library is being initially developed as a library for my personal project a
 Hence, API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
 - [ ] Drives
-	- [x] Get Default Drive
-	- [ ] Get Drive
+	- [x] Get default drive
+	- [ ] Get individual drive
 	- [x] List all available drives
 - [ ] Items
+	- [x] Get individual item
 	- [ ] Create
 	- [ ] Create folder
 	- [ ] Copy
