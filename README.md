@@ -4,7 +4,7 @@
     <img src="https://gclstorage.blob.core.windows.net/images/go-onedrive-banner.png" />
 </div>
 
-![Test Status](https://github.com/goh-chunlin/go-onedrive/workflows/Go/badge.svg?branch=main)
+![Go Build](https://github.com/goh-chunlin/go-onedrive/workflows/Go%20Build/badge.svg?branch=main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.buymeacoffee.com/chunlin)
 
@@ -37,7 +37,7 @@ drives, err := onedrive.Drives.List(ctx)
 
 NOTE: Using the [context](https://godoc.org/context) package, one can easily pass cancelation signals and deadlines to various services of the client for handling a request. In case there is no context available, then `context.Background()` can be used as a starting point.
 
-### Authentication ###
+## Authentication ##
 
 The go-onedrive library does not directly handle authentication. Instead, when creating a new client, pass an `http.Client` that can handle authentication for you. The easiest and recommended way to do this is using the [oauth2](https://github.com/golang/oauth2)
 library.
@@ -50,27 +50,30 @@ See the [oauth2 docs](https://godoc.org/golang.org/x/oauth2) for complete instru
 
 ## Contributing ##
 
-This library is being initially developed as a library for my personal project, so API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
+This library is being initially developed as a library for my personal project as listed below.
+- [Lunar.Music.Web](https://github.com/goh-chunlin/Lunar.Music.Web).
+
+Hence, API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
 - [ ] Drives
- - [x] Get Default Drive
- - [ ] Get Drive
- - [x] List all available drives
+	- [x] Get Default Drive
+	- [ ] Get Drive
+	- [x] List all available drives
 - [ ] Items
- - [ ] Create
- 	- [ ] Create folder
- - [ ] Copy
- 	- [ ] Copy file/folder
- 	- [ ] Async job to track progress
- - [ ] Delete
- - [ ] Download
- - [x] List children
- - [ ] Search
- - [ ] Move
- - [ ] Upload
- 	- [ ] Simple item upload <100MB
- 	- [ ] Resumable item upload
- 	- [ ] Upload from URL
+	- [ ] Create
+	- [ ] Create folder
+	- [ ] Copy
+	- [ ] Copy file/folder
+	- [ ] Async job to track progress
+	- [ ] Delete
+	- [ ] Download
+	- [x] List children
+- [ ] Search
+- [ ] Move
+- [ ] Upload
+	- [ ] Simple item upload <100MB
+	- [ ] Resumable item upload
+	- [ ] Upload from URL
 
 ## Sensei Projects ##
 
