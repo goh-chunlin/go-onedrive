@@ -68,6 +68,26 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 	return oneDriveResponse, nil
 }
 
+// List the items of a special folder in the default drive of the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get_specialfolder?view=odsp-graph-online#get-children-of-a-special-folder
+func (s *DriveItemsService) ListSpecial(ctx context.Context, folderName DriveSpecialFolder) (*OneDriveDriveItemsResponse, error) {
+	apiURL := "me/drive/special/" + folderName.toString() + "/children"
+
+	req, err := s.client.NewRequest("GET", apiURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var oneDriveResponse *OneDriveDriveItemsResponse
+	err = s.client.Do(ctx, req, &oneDriveResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return oneDriveResponse, nil
+}
+
 // Get an item in the default drive of the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_get?view=odsp-graph-online
