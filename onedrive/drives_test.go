@@ -29,7 +29,7 @@ func TestDrivesService_Default_authenticatedUser(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	gotDefaultDrive, err := client.Drives.Default(ctx)
+	gotDefaultDrive, err := client.Drives.Get(ctx, "")
 	if err != nil {
 		t.Errorf("Drives.Default returned error: %v", err)
 	}

@@ -36,11 +36,16 @@ type DriveQuota struct {
 	State     string `json:"state"`
 }
 
-// List the default drive of the authenticated user.
+// Get a specified drive (or default drive if driveId is empty) of the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get?view=odsp-graph-online
-func (s *DrivesService) Default(ctx context.Context) (*Drive, error) {
-	req, err := s.client.NewRequest("GET", "me/drive")
+func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error) {
+	apiURL := "me/drive/" + driveId
+	if driveId == "" {
+		apiURL = "me/drive"
+	}
+
+	req, err := s.client.NewRequest("GET", apiURL)
 	if err != nil {
 		return nil, err
 	}
