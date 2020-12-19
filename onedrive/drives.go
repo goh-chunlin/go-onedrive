@@ -40,7 +40,7 @@ type DriveQuota struct {
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get?view=odsp-graph-online
 func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error) {
-	apiURL := "me/drive/" + driveId
+	apiURL := "me/drives/" + driveId
 	if driveId == "" {
 		apiURL = "me/drive"
 	}
