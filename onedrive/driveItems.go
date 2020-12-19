@@ -91,3 +91,27 @@ func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem,
 
 	return driveItem, nil
 }
+
+// Get an item from special folder in the default drive of the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get_specialfolder?view=odsp-graph-online
+func (s *DriveItemsService) GetSpecial(ctx context.Context, folderName DriveSpecialFolder) (*DriveItem, error) {
+	if folderName.toString() == "" {
+		return nil, errors.New("Please provide the Item ID of the item.")
+	}
+
+	apiURL := "me/drive/special/" + folderName.toString()
+
+	req, err := s.client.NewRequest("GET", apiURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var driveItem *DriveItem
+	err = s.client.Do(ctx, req, &driveItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return driveItem, nil
+}
