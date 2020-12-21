@@ -75,3 +75,44 @@ func TestDriveSearchService_SearchDriveItems_authenticatedUser(t *testing.T) {
 	}
 
 }
+
+func TestDriveSearchService_SearchAllDriveItems_authenticatedUser(t *testing.T) {
+	client, mux, _, teardown := setup()
+
+	defer teardown()
+	mux.HandleFunc("/me/drive/search(q='Test')", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+
+		jsonData := getTestDataFromFile(t, "fake_driveItems_searchResults.json")
+
+		fmt.Fprint(w, string(jsonData))
+	})
+
+	ctx := context.Background()
+	gotOneDriveResponse, err := client.DriveSearch.SearchAll(ctx, "Test")
+	if err != nil {
+		t.Errorf("DriveSearch.SearchAll returned error: %v", err)
+	}
+
+	jsonFile, err := os.Open("testdata/fake_driveItems_searchResults.json")
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	defer jsonFile.Close()
+
+	comparedToData, err := ioutil.ReadAll(jsonFile)
+
+	if err != nil {
+		t.Errorf("Cannot load the file data for comparison: %v", err)
+	}
+
+	var wantOneDriveResponse *OneDriveDriveSearchResponse
+	json.Unmarshal(comparedToData, &wantOneDriveResponse)
+
+	if !reflect.DeepEqual(gotOneDriveResponse, wantOneDriveResponse) {
+		t.Errorf("DriveSearch.SearchAll returned %+v, want %+v", gotOneDriveResponse, wantOneDriveResponse)
+	}
+
+}

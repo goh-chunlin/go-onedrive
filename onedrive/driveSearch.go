@@ -47,3 +47,25 @@ func (s *DriveSearchService) Search(ctx context.Context, query string) (*OneDriv
 
 	return oneDriveResponse, nil
 }
+
+// Search the items in the default drive of the authenticated user as well as items shared with the user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_search?view=odsp-graph-online#searching-for-items-a-user-can-access
+func (s *DriveSearchService) SearchAll(ctx context.Context, query string) (*OneDriveDriveSearchResponse, error) {
+	query = strings.Replace(query, "'", "''", -1)
+
+	apiURL := fmt.Sprintf("me/drive/search(q='%v')", query)
+
+	req, err := s.client.NewRequest("GET", apiURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var oneDriveResponse *OneDriveDriveSearchResponse
+	err = s.client.Do(ctx, req, &oneDriveResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return oneDriveResponse, nil
+}
