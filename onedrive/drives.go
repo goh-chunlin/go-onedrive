@@ -6,6 +6,7 @@ package onedrive
 
 import (
 	"context"
+	"net/url"
 )
 
 // DrivesService handles communication with the drives related methods of the OneDrive API.
@@ -40,7 +41,7 @@ type DriveQuota struct {
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get?view=odsp-graph-online
 func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error) {
-	apiURL := "me/drives/" + driveId
+	apiURL := "me/drives/" + url.PathEscape(driveId)
 	if driveId == "" {
 		apiURL = "me/drive"
 	}

@@ -7,6 +7,7 @@ package onedrive
 import (
 	"context"
 	"errors"
+	"net/url"
 )
 
 // DriveItemsService handles communication with the drive items related methods of the OneDrive API.
@@ -49,7 +50,7 @@ type OneDriveImage struct {
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/driveitem?view=odsp-graph-online
 func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriveDriveItemsResponse, error) {
-	apiURL := "me/drive/items/" + folderId + "/children"
+	apiURL := "me/drive/items/" + url.PathEscape(folderId) + "/children"
 	if folderId == "" {
 		apiURL = "me/drive/root/children"
 	}
@@ -72,7 +73,7 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get_specialfolder?view=odsp-graph-online#get-children-of-a-special-folder
 func (s *DriveItemsService) ListSpecial(ctx context.Context, folderName DriveSpecialFolder) (*OneDriveDriveItemsResponse, error) {
-	apiURL := "me/drive/special/" + folderName.toString() + "/children"
+	apiURL := "me/drive/special/" + url.PathEscape(folderName.toString()) + "/children"
 
 	req, err := s.client.NewRequest("GET", apiURL)
 	if err != nil {
@@ -96,7 +97,7 @@ func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem,
 		return nil, errors.New("Please provide the Item ID of the item.")
 	}
 
-	apiURL := "me/drive/items/" + itemId
+	apiURL := "me/drive/items/" + url.PathEscape(itemId)
 
 	req, err := s.client.NewRequest("GET", apiURL)
 	if err != nil {
@@ -120,7 +121,7 @@ func (s *DriveItemsService) GetSpecial(ctx context.Context, folderName DriveSpec
 		return nil, errors.New("Please provide the Item ID of the item.")
 	}
 
-	apiURL := "me/drive/special/" + folderName.toString()
+	apiURL := "me/drive/special/" + url.PathEscape(folderName.toString())
 
 	req, err := s.client.NewRequest("GET", apiURL)
 	if err != nil {
