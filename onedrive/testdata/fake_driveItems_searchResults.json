@@ -1,0 +1,156 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(driveItem)",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.driveItem",
+            "@microsoft.graph.downloadUrl": "https://public.by.files.1drv.com/Test-C30NdubB7LCYGUQwJCj5cqvc3UJCVn-4tftEv1JzB6Fm53guUHCelCaGLcL8R4_0A58zDfnXYK1Sn3gKMOfI1dl2gplnBksAMz2PjplwyMhx-_P0",
+            "createdDateTime": "2020-11-28T11:57:20.457Z",
+            "cTag": "Test",
+            "description": "Test",
+            "eTag": "Test",
+            "id": "Test!Test",
+            "lastModifiedDateTime": "2020-11-28T12:17:35.32Z",
+            "name": "Test.png",
+            "size": 869771,
+            "webUrl": "https://1drv.ms/i/s!Test",
+            "reactions": {
+                "commentCount": 0
+            },
+            "createdBy": {
+                "application": {
+                    "displayName": "OneDrive website",
+                    "id": "00000000005"
+                },
+                "device": {
+                    "id": "1800059a3671a1"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                },
+                "oneDriveSync": {
+                    "@odata.type": "#microsoft.graph.identity",
+                    "id": "ef240ac9-30b7-4482-a273-105b5a62e451"
+                }
+            },
+            "lastModifiedBy": {
+                "application": {
+                    "displayName": "OneDrive website",
+                    "id": "00000000005"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                }
+            },
+            "parentReference": {
+                "driveId": "1f3a9fcd578789dd",
+                "driveType": "personal",
+                "id": "Test!13219",
+                "name": "AlbumImages",
+                "path": "/drive/root:/Music/AlbumImages"
+            },
+            "file": {
+                "mimeType": "image/png",
+                "hashes": {
+                    "quickXorHash": "HEd9VHrvSaq28r5CdHsFNS7IvTc=",
+                    "sha1Hash": "3DFCC70761ADBD525FC327DBA4BCBCC057A76B36",
+                    "sha256Hash": "86F447874270945C3EE90A4A020D03A392B368ACB313EAF09AF28714FC656236"
+                }
+            },
+            "fileSystemInfo": {
+                "createdDateTime": "2020-11-28T11:57:05Z",
+                "lastModifiedDateTime": "2020-11-28T11:57:40.04Z"
+            },
+            "image": {
+                "height": 960,
+                "width": 640
+            },
+            "photo": {},
+            "searchResult": {
+                "onClickTelemetryUrl": "https://www.bing.com/personalsearchclick?IG=22A96EAAC043447E817A5A6196F23AA4&CID=1F3A9FCD578789DD0000000000000000&ID=DevEx%2c5023&q=Shakugan&resid=1F3A9FCD578789DD%2113291"
+            }
+        },
+        {
+            "@odata.type": "#microsoft.graph.driveItem",
+            "@microsoft.graph.downloadUrl": "https://public.by.files.1drv.com/Test-V2A2FfNHzvwQcnK_fl4kAklvoQ2y80hR1q_Z_fab3xIF6grsE3tSxxRZJGaIIBSoREWlu1sdLynV8BV8RcxnTNy-o7pRn_J3tYIqfHKhMx0rd05zA8hAJUjvZPcoABmMjtwkA2VfSr_YR87c0vKiEM",
+            "createdDateTime": "2020-12-08T05:29:18.74Z",
+            "cTag": "Test",
+            "description": "Test",
+            "eTag": "Test",
+            "id": "Test!13317",
+            "lastModifiedDateTime": "2020-12-08T05:33:36.743Z",
+            "name": "Test.mp3",
+            "size": 4690355,
+            "webUrl": "https://1drv.ms/u/s!Test",
+            "reactions": {
+                "commentCount": 0
+            },
+            "createdBy": {
+                "application": {
+                    "displayName": "OneDrive website",
+                    "id": "00000000005"
+                },
+                "device": {
+                    "id": "1800059a3671a1"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                },
+                "oneDriveSync": {
+                    "@odata.type": "#microsoft.graph.identity",
+                    "id": "ef240ac9-30b7-4482-a273-105b5a62e451"
+                }
+            },
+            "lastModifiedBy": {
+                "device": {
+                    "id": "1800059a3671a1"
+                },
+                "application": {
+                    "displayName": "OneDrive website",
+                    "id": "00000000005"
+                },
+                "user": {
+                    "displayName": "User Display Name",
+                    "id": "0000000000000002"
+                },
+                "oneDriveSync": {
+                    "@odata.type": "#microsoft.graph.identity",
+                    "id": "ef240ac9-30b7-4482-a273-105b5a62e451"
+                }
+            },
+            "parentReference": {
+                "driveId": "Test",
+                "driveType": "personal",
+                "id": "Test!2538",
+                "name": "Music",
+                "path": "/drive/root:/Music"
+            },
+            "audio": {
+                "album": "Test",
+                "albumArtist": "Test",
+                "bitrate": 128,
+                "duration": 292884,
+                "hasDrm": false,
+                "isVariableBitrate": false,
+                "title": "Test"
+            },
+            "file": {
+                "mimeType": "audio/mpeg",
+                "hashes": {
+                    "quickXorHash": "Test=",
+                    "sha1Hash": "Test",
+                    "sha256Hash": "Test"
+                }
+            },
+            "fileSystemInfo": {
+                "createdDateTime": "2020-10-25T13:53:53Z",
+                "lastModifiedDateTime": "2020-12-08T05:07:20Z"
+            },
+            "searchResult": {
+                "onClickTelemetryUrl": "https://www.bing.com/personalsearchclick?IG=22A96EAAC043447E817A5A6196F23AA4&CID=1F3A9FCD578789DD0000000000000000&ID=DevEx%2c5024&q=Shakugan&resid=1F3A9FCD578789DD%2113317"
+            }
+        }
+    ]
+}

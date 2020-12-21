@@ -1,0 +1,11 @@
+{
+    "error": {
+        "code": "invalidRequest",
+        "message": "Search Query cannot be empty.",
+        "innerError": {
+            "date": "2020-12-21T11:12:39",
+            "request-id": "3b752cb4-89a9-46f1-9b68-bfde2d3efdcd",
+            "client-request-id": "6bf29bcc-c0fc-0f5c-3f98-1a88a24534a2"
+        }
+    }
+}
