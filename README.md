@@ -71,7 +71,7 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [ ] Delete
 	- [ ] Download
 	- [x] List children
-- [ ] Search
+- [x] Search
 - [ ] Move
 - [ ] Upload
 	- [ ] Simple item upload <100MB
