@@ -32,6 +32,17 @@ type DriveItem struct {
 	Image       *OneDriveImage `json:"image"`
 }
 
+// NewFolderCreationRequest represents the information needed of a new OneDrive folder to be created.
+type NewFolderCreationRequest struct {
+	FolderName  string      `json:"name"`
+	FolderFacet FolderFacet `json:"folder"`
+	Restriction string      `json:"@microsoft.graph.conflictBehavior"`
+}
+
+// FolderFacet represents one of the facets to create a new folder.
+type FolderFacet struct {
+}
+
 // OneDriveAudio represents the audio metadata of a OneDrive drive item which is an audio.
 type OneDriveAudio struct {
 	Title       string `json:"title"`
@@ -156,7 +167,15 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, parentFolderNam
 
 	apiURL := "me/drive/items/" + url.PathEscape(parentFolderName) + "/children"
 
-	req, err := s.client.NewRequest("POST", apiURL, nil)
+	folderFacet := &FolderFacet{}
+
+	newFolder := &NewFolderCreationRequest{
+		FolderName:  folderName,
+		FolderFacet: *folderFacet,
+		Restriction: "rename",
+	}
+
+	req, err := s.client.NewRequest("POST", apiURL, newFolder)
 	if err != nil {
 		return nil, err
 	}
