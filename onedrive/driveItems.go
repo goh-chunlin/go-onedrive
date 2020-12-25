@@ -194,3 +194,34 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string,
 
 	return driveItem, nil
 }
+
+// Delete a drive item in a drive of the authenticated user.
+// The deleted item will be moved to the Recycle Bin instead of getting permanently deleted.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_delete?view=odsp-graph-online
+func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId string) (*DriveItem, error) {
+	if itemId == "" {
+		return nil, errors.New("Please provide the Item ID of the item to be deleted.")
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(itemId)
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(itemId)
+	}
+
+	req, err := s.client.NewRequest("DELETE", apiURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var driveItem *DriveItem
+	err = s.client.Do(ctx, req, &driveItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return driveItem, nil
+}
