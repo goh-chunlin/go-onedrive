@@ -148,15 +148,18 @@ func (s *DriveItemsService) GetSpecial(ctx context.Context, folderName DriveSpec
 	return driveItem, nil
 }
 
-// Create a new folder in the default drive of the authenticated user.
+// Create a new folder in a drive of the authenticated user.
 // If there is already a folder in the same OneDrive directory with the same name,
 // OneDrive will choose a new name for the folder while creating it.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
 //
 // If parentFolderName is empty, it means the new folder will be created at
 // the root of the default drive.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_post_children?view=odsp-graph-online
-func (s *DriveItemsService) CreateNewFolder(ctx context.Context, parentFolderName string, folderName string) (*DriveItem, error) {
+func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string, parentFolderName string, folderName string) (*DriveItem, error) {
 	if folderName == "" {
 		return nil, errors.New("Please provide the folder name.")
 	}
@@ -166,6 +169,9 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, parentFolderNam
 	}
 
 	apiURL := "me/drive/items/" + url.PathEscape(parentFolderName) + "/children"
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(parentFolderName) + "/children"
+	}
 
 	folderFacet := &FolderFacet{}
 
