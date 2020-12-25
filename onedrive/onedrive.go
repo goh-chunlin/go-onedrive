@@ -129,15 +129,20 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 		return err
 	}
 
-	responseBodyReader := bytes.NewReader(responseBody)
-	var oneDriveError *ErrorResponse
-	json.NewDecoder(responseBodyReader).Decode(&oneDriveError)
-	if oneDriveError.Error != nil {
-		return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message + " (" + oneDriveError.Error.InnerError.Date + ")")
-	}
+	if responseBody != nil && len(responseBody) > 0 {
 
-	responseBodyReader = bytes.NewReader(responseBody)
-	err = json.NewDecoder(responseBodyReader).Decode(target)
+		responseBodyReader := bytes.NewReader(responseBody)
+
+		var oneDriveError *ErrorResponse
+		json.NewDecoder(responseBodyReader).Decode(&oneDriveError)
+
+		if oneDriveError.Error != nil {
+			return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message + " (" + oneDriveError.Error.InnerError.Date + ")")
+		}
+
+		responseBodyReader = bytes.NewReader(responseBody)
+		err = json.NewDecoder(responseBodyReader).Decode(target)
+	}
 
 	return err
 }
