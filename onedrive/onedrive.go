@@ -64,7 +64,7 @@ func NewClient(httpClient *http.Client) *Client {
 // NewRequest creates an API request. A relative URL can be provided in relativeURL,
 // in which case it is resolved relative to the BaseURL of the Client.
 // Relative URLs should always be specified WITHOUT a preceding slash.
-func (c *Client) NewRequest(method, relativeURL string) (*http.Request, error) {
+func (c *Client) NewRequest(method, relativeURL string, body interface{}) (*http.Request, error) {
 	if !strings.HasSuffix(c.BaseURL.Path, "/") {
 		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
 	}
@@ -72,6 +72,19 @@ func (c *Client) NewRequest(method, relativeURL string) (*http.Request, error) {
 	apiUrl, err := c.BaseURL.Parse(relativeURL)
 	if err != nil {
 		return nil, err
+	}
+
+	if body != nil {
+		jsonBody, err := json.Marshal(body)
+
+		if err != nil {
+			return nil, err
+		}
+
+		req, err := http.NewRequest(method, apiUrl.String(), bytes.NewBuffer([]byte(jsonBody)))
+		req.Header.Set("Content-Type", "application/json")
+
+		return req, nil
 	}
 
 	// Create a new request using http

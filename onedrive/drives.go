@@ -46,7 +46,7 @@ func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error)
 		apiURL = "me/drive"
 	}
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error)
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_list?view=odsp-graph-online
 func (s *DrivesService) List(ctx context.Context) (*OneDriveDrivesResponse, error) {
-	req, err := s.client.NewRequest("GET", "me/drives")
+	req, err := s.client.NewRequest("GET", "me/drives", nil)
 	if err != nil {
 		return nil, err
 	}

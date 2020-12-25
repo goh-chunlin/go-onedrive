@@ -55,7 +55,7 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 		apiURL = "me/drive/root/children"
 	}
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 func (s *DriveItemsService) ListSpecial(ctx context.Context, folderName DriveSpecialFolder) (*OneDriveDriveItemsResponse, error) {
 	apiURL := "me/drive/special/" + url.PathEscape(folderName.toString()) + "/children"
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem,
 
 	apiURL := "me/drive/items/" + url.PathEscape(itemId)
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -118,12 +118,45 @@ func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem,
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get_specialfolder?view=odsp-graph-online
 func (s *DriveItemsService) GetSpecial(ctx context.Context, folderName DriveSpecialFolder) (*DriveItem, error) {
 	if folderName.toString() == "" {
-		return nil, errors.New("Please provide the Item ID of the item.")
+		return nil, errors.New("Please specify which special folder to use.")
 	}
 
 	apiURL := "me/drive/special/" + url.PathEscape(folderName.toString())
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var driveItem *DriveItem
+	err = s.client.Do(ctx, req, &driveItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return driveItem, nil
+}
+
+// Create a new folder in the default drive of the authenticated user.
+// If there is already a folder in the same OneDrive directory with the same name,
+// OneDrive will choose a new name for the folder while creating it.
+//
+// If parentFolderName is empty, it means the new folder will be created at
+// the root of the default drive.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_post_children?view=odsp-graph-online
+func (s *DriveItemsService) CreateNewFolder(ctx context.Context, parentFolderName string, folderName string) (*DriveItem, error) {
+	if folderName == "" {
+		return nil, errors.New("Please provide the folder name.")
+	}
+
+	if parentFolderName == "" {
+		parentFolderName = "root"
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(parentFolderName) + "/children"
+
+	req, err := s.client.NewRequest("POST", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}

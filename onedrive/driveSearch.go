@@ -34,7 +34,7 @@ func (s *DriveSearchService) Search(ctx context.Context, query string) (*OneDriv
 
 	apiURL := fmt.Sprintf("me/drive/root/search(q='%v')", query)
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (s *DriveSearchService) SearchAll(ctx context.Context, query string) (*OneD
 
 	apiURL := fmt.Sprintf("me/drive/search(q='%v')", query)
 
-	req, err := s.client.NewRequest("GET", apiURL)
+	req, err := s.client.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
