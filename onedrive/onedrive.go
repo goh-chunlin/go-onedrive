@@ -129,7 +129,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 		return err
 	}
 
-	if responseBody != nil && len(responseBody) > 0 {
+	if resp.StatusCode != 204 {
 
 		responseBodyReader := bytes.NewReader(responseBody)
 
@@ -142,6 +142,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 
 		responseBodyReader = bytes.NewReader(responseBody)
 		err = json.NewDecoder(responseBodyReader).Decode(target)
+
 	}
 
 	return err
