@@ -64,11 +64,11 @@ Hence, API methods will likely be implemented in the order that they are needed 
 - [ ] Items
 	- [x] Get individual item
 	- [ ] Create
-	- [ ] Create folder
+	- [x] Create folder
 	- [ ] Copy
 	- [ ] Copy file/folder
 	- [ ] Async job to track progress
-	- [ ] Delete
+	- [x] Delete
 	- [ ] Download
 	- [x] List children
 - [x] Search
