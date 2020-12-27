@@ -57,26 +57,25 @@ This library is being initially developed as a library for my personal project a
 
 Hence, API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
+- [ ] General
+	- [ ] Async job to track progress
+    - [x] Search
 - [x] Drives
 	- [x] Get default drive
 	- [x] Get individual drive
 	- [x] List all available drives
-- [ ] Items
-	- [x] Get individual item
-	- [ ] Create
-	- [x] Create folder
+- [ ] Folders
+    - [x] Create
 	- [ ] Copy
-	- [ ] Copy file/folder
-	- [ ] Async job to track progress
 	- [x] Delete
-	- [ ] Download
-	- [x] List children
-- [x] Search
-- [ ] Move
-- [ ] Upload
-	- [ ] Simple item upload <100MB
-	- [ ] Resumable item upload
-	- [ ] Upload from URL
+	- [x] List children (items)
+    - [ ] Move
+- [ ] Items
+	- [x] Get individual item	
+	- [ ] Copy
+	- [x] Delete
+    - [ ] Move
+    - [ ] Upload simple item upload <4MB
 
 ## Sensei Projects ##
 
