@@ -64,16 +64,16 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [x] Get default drive
 	- [x] Get individual drive
 	- [x] List all available drives
-- [ ] Folders
+- [x] Folders
     - [x] Create
-	- [ ] Copy
+	- [x] Copy
 	- [x] Delete
 	- [x] List children (items)
     - [x] Move
     - [x] Rename
 - [ ] Items
 	- [x] Get individual item	
-	- [ ] Copy
+	- [x] Copy
 	- [x] Delete
     - [x] Move
     - [x] Rename
