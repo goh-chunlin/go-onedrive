@@ -129,7 +129,13 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 		return err
 	}
 
-	if resp.StatusCode != 204 {
+	if resp.StatusCode == 202 {
+
+		var jsonStream = "{\"Location\": \"" + url.PathEscape(resp.Header["Location"][0]) + "\"}"
+
+		err = json.NewDecoder(strings.NewReader(jsonStream)).Decode(target)
+
+	} else if resp.StatusCode != 204 {
 
 		responseBodyReader := bytes.NewReader(responseBody)
 

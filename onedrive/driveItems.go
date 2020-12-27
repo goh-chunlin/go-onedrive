@@ -74,6 +74,17 @@ type RenameItemResponse struct {
 	File Facet  `json:"file"`
 }
 
+// CopyItemRequest represents the information needed of copying an item in OneDrive.
+type CopyItemRequest struct {
+	Name         string          `json:"name"`
+	ParentFolder ParentReference `json:"parentReference"`
+}
+
+// CopyItemResponse represents the JSON object returned by the OneDrive API after copying an item.
+type CopyItemResponse struct {
+	Location string `json:"location"`
+}
+
 // OneDriveAudio represents the audio metadata of a OneDrive drive item which is an audio.
 type OneDriveAudio struct {
 	Title       string `json:"title"`
@@ -332,6 +343,69 @@ func (s *DriveItemsService) Rename(ctx context.Context, driveId string, itemId s
 	}
 
 	var response *RenameItemResponse
+	err = s.client.Do(ctx, req, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Copy a drive item to a new parent item or with a new name in a drive of the authenticated user.
+//
+// If sourceDriveId or destinationDriveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_copy?view=odsp-graph-online
+func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, itemId string,
+	destinationDriveId string, destinationFolderId string, newItemName string) (*CopyItemResponse, error) {
+	if itemId == "" {
+		return nil, errors.New("Please provide the Item ID of the item to be copied.")
+	}
+
+	if destinationFolderId == "" {
+		return nil, errors.New("Please provide the destination, i.e. the ID of the new parent folder for the item.")
+	}
+
+	if destinationDriveId == "" {
+		reqDefaultDriveInfo, err := s.client.NewRequest("GET", "me/drive", nil)
+		if err != nil {
+			return nil, err
+		}
+
+		var defaultDrive *Drive
+		err = s.client.Do(ctx, reqDefaultDriveInfo, &defaultDrive)
+		if err != nil {
+			return nil, err
+		}
+
+		destinationDriveId = defaultDrive.Id
+	}
+
+	destinationParentFolder := &ParentReference{
+		Id:      destinationFolderId,
+		DriveId: destinationDriveId,
+	}
+
+	copyItemRequest := &CopyItemRequest{
+		ParentFolder: *destinationParentFolder,
+	}
+
+	if newItemName != "" {
+		copyItemRequest.Name = newItemName
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/copy"
+	if sourceDriveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(sourceDriveId) + "/items/" + url.PathEscape(itemId) + "/copy"
+	}
+
+	req, err := s.client.NewRequest("POST", apiURL, copyItemRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *CopyItemResponse
 	err = s.client.Do(ctx, req, &response)
 	if err != nil {
 		return nil, err
