@@ -367,6 +367,10 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 		return nil, errors.New("Please provide the destination, i.e. the ID of the new parent folder for the item.")
 	}
 
+	if newItemName == "" {
+		return nil, errors.New("Please provide the name of the new item after the copy is done. OneDrive will reject item name which already exists in destination.")
+	}
+
 	if destinationDriveId == "" {
 		reqDefaultDriveInfo, err := s.client.NewRequest("GET", "me/drive", nil)
 		if err != nil {
@@ -389,10 +393,6 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 
 	copyItemRequest := &CopyItemRequest{
 		ParentFolder: *destinationParentFolder,
-	}
-
-	if newItemName != "" {
-		copyItemRequest.Name = newItemName
 	}
 
 	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/copy"
