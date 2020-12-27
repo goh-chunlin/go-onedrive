@@ -393,6 +393,7 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 
 	copyItemRequest := &CopyItemRequest{
 		ParentFolder: *destinationParentFolder,
+		Name:         newItemName,
 	}
 
 	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/copy"
