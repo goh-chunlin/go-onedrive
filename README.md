@@ -69,13 +69,13 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [ ] Copy
 	- [x] Delete
 	- [x] List children (items)
-    - [ ] Move
+    - [x] Move
     - [ ] Rename
 - [ ] Items
 	- [x] Get individual item	
 	- [ ] Copy
 	- [x] Delete
-    - [ ] Move
+    - [x] Move
     - [ ] Rename
     - [ ] Upload simple item size < 4MB
 

@@ -34,16 +34,16 @@ type DriveItem struct {
 
 // NewFolderCreationRequest represents the information needed of a new OneDrive folder to be created.
 type NewFolderCreationRequest struct {
-	FolderName  string      `json:"name"`
-	FolderFacet FolderFacet `json:"folder"`
-	Restriction string      `json:"@microsoft.graph.conflictBehavior"`
+	FolderName  string `json:"name"`
+	FolderFacet Facet  `json:"folder"`
+	Restriction string `json:"@microsoft.graph.conflictBehavior"`
 }
 
-// FolderFacet represents one of the facets to create a new folder.
-type FolderFacet struct {
+// Facet represents one of the facets for a folder or file.
+type Facet struct {
 }
 
-// MoveItemRequest represents the information needed of a moving an item in OneDrive.
+// MoveItemRequest represents the information needed of moving an item in OneDrive.
 type MoveItemRequest struct {
 	ParentFolder ParentReference `json:"parentReference"`
 }
@@ -60,6 +60,18 @@ type MoveItemResponse struct {
 	Id           string          `json:"id"`
 	Name         string          `json:"name"`
 	ParentFolder ParentReference `json:"parentReference"`
+}
+
+// RenameItemRequest represents the information needed of renaming an item in OneDrive.
+type RenameItemRequest struct {
+	Name string `json:"name"`
+}
+
+// RenameItemResponse represents the JSON object returned by the OneDrive API after renaming an item.
+type RenameItemResponse struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+	File Facet  `json:"file"`
 }
 
 // OneDriveAudio represents the audio metadata of a OneDrive drive item which is an audio.
@@ -192,7 +204,7 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string,
 		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(parentFolderName) + "/children"
 	}
 
-	folderFacet := &FolderFacet{}
+	folderFacet := &Facet{}
 
 	newFolder := &NewFolderCreationRequest{
 		FolderName:  folderName,
@@ -263,7 +275,6 @@ func (s *DriveItemsService) Move(ctx context.Context, driveId string, itemId str
 		return nil, errors.New("Please provide the destination, i.e. the ID of the new parent folder for the item.")
 	}
 
-	//MoveItemRequest
 	destinationParentFolder := &ParentReference{
 		Id: destinationParentFolderId,
 	}
@@ -283,6 +294,44 @@ func (s *DriveItemsService) Move(ctx context.Context, driveId string, itemId str
 	}
 
 	var response *MoveItemResponse
+	err = s.client.Do(ctx, req, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// Rename a drive item in a drive of the authenticated user.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_update?view=odsp-graph-online
+func (s *DriveItemsService) Rename(ctx context.Context, driveId string, itemId string, newItemName string) (*RenameItemResponse, error) {
+	if itemId == "" {
+		return nil, errors.New("Please provide the Item ID of the item to be moved.")
+	}
+
+	if newItemName == "" {
+		return nil, errors.New("Please provide a new name for the item.")
+	}
+
+	newNameRequest := &RenameItemRequest{
+		Name: newItemName,
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(itemId)
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(itemId)
+	}
+
+	req, err := s.client.NewRequest("PATCH", apiURL, newNameRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *RenameItemResponse
 	err = s.client.Do(ctx, req, &response)
 	if err != nil {
 		return nil, err
