@@ -70,13 +70,13 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [x] Delete
 	- [x] List children (items)
     - [x] Move
-    - [ ] Rename
+    - [x] Rename
 - [ ] Items
 	- [x] Get individual item	
 	- [ ] Copy
 	- [x] Delete
     - [x] Move
-    - [ ] Rename
+    - [x] Rename
     - [ ] Upload simple item size < 4MB
 
 ## Sensei Projects ##
