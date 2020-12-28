@@ -57,8 +57,8 @@ This library is being initially developed as a library for my personal project a
 
 Hence, API methods will likely be implemented in the order that they are needed by my personal project. However, I still welcome you to contribute to this project to support the following features.
 
-- [ ] General
-	- [ ] Async job to track progress
+- [x] General
+	- [x] Async job to track progress
     - [x] Search
 - [x] Drives
 	- [x] Get default drive
