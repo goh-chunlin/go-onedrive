@@ -17,7 +17,8 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://graph.microsoft.com/v1.0/"
+	defaultBaseURL  = "https://graph.microsoft.com/v1.0/"
+	oneDriveBaseUrl = "https://api.onedrive.com/v1.0/"
 )
 
 type service struct {
@@ -35,9 +36,10 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the OneDrive API.
-	Drives      *DrivesService
-	DriveItems  *DriveItemsService
-	DriveSearch *DriveSearchService
+	Drives        *DrivesService
+	DriveItems    *DriveItemsService
+	DriveSearch   *DriveSearchService
+	DriveAsyncJob *DriveAsyncJobService
 }
 
 // NewClient returns a new OneDrive API client. If a nil httpClient is
@@ -57,6 +59,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Drives = (*DrivesService)(&c.common)
 	c.DriveItems = (*DriveItemsService)(&c.common)
 	c.DriveSearch = (*DriveSearchService)(&c.common)
+	c.DriveAsyncJob = (*DriveAsyncJobService)(&c.common)
 
 	return c
 }
@@ -66,7 +69,7 @@ func NewClient(httpClient *http.Client) *Client {
 // Relative URLs should always be specified WITHOUT a preceding slash.
 func (c *Client) NewRequest(method, relativeURL string, body interface{}) (*http.Request, error) {
 	if !strings.HasSuffix(c.BaseURL.Path, "/") {
-		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
+		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not.", c.BaseURL)
 	}
 
 	apiUrl, err := c.BaseURL.Parse(relativeURL)
@@ -90,7 +93,41 @@ func (c *Client) NewRequest(method, relativeURL string, body interface{}) (*http
 	// Create a new request using http
 	req, err := http.NewRequest(method, apiUrl.String(), nil)
 
-	return req, nil
+	return req, err
+}
+
+// NewRequest creates an API request to OneDrive API directly with an absolute URL.
+func (c *Client) NewRequestToOneDrive(method, absoluteUrl string, body interface{}) (*http.Request, error) {
+	if !strings.HasPrefix(absoluteUrl, oneDriveBaseUrl) && !strings.HasPrefix(absoluteUrl, "/test-onedrive-api") {
+		return nil, fmt.Errorf("The given URL %q is not a OneDrive API URL.", c.BaseURL)
+	}
+
+	if strings.HasPrefix(absoluteUrl, "/test-onedrive-api") {
+		apiUrl, err := c.BaseURL.Parse(absoluteUrl)
+		if err != nil {
+			return nil, err
+		}
+
+		absoluteUrl = apiUrl.String()
+	}
+
+	if body != nil {
+		jsonBody, err := json.Marshal(body)
+
+		if err != nil {
+			return nil, err
+		}
+
+		req, err := http.NewRequest(method, absoluteUrl, bytes.NewBuffer([]byte(jsonBody)))
+		req.Header.Set("Content-Type", "application/json")
+
+		return req, nil
+	}
+
+	// Create a new request using http
+	req, err := http.NewRequest(method, absoluteUrl, nil)
+
+	return req, err
 }
 
 // Do sends an API request and returns the API response. The API response is

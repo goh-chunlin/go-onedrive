@@ -11,9 +11,10 @@ type ErrorResponse struct {
 
 // Error represents the error in the response returned by OneDrive drive API.
 type Error struct {
-	Code       string      `json:"code"`
-	Message    string      `json:"message"`
-	InnerError *InnerError `json:"innerError"`
+	Code             string      `json:"code"`
+	Message          string      `json:"message"`
+	LocalizedMessage string      `json:"localizedMessage"`
+	InnerError       *InnerError `json:"innerError"`
 }
 
 // InnerError represents the error details in the error returned by OneDrive drive API.

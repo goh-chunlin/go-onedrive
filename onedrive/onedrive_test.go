@@ -17,7 +17,8 @@ import (
 const (
 	// baseURLPath is a non-empty Client.BaseURL path to use during tests,
 	// to ensure relative URLs are used for all endpoints.
-	baseURLPath = "/api"
+	baseURLPath         = "/api"
+	baseOneDriveURLPath = "/test-onedrive-api"
 )
 
 // setup sets up a test HTTP server along with a github.Client that is
@@ -30,6 +31,7 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 	// Ensure that tests catch mistakes where the endpoint URL is specified as absolute rather than relative.
 	apiHandler := http.NewServeMux()
 	apiHandler.Handle(baseURLPath+"/", http.StripPrefix(baseURLPath, mux))
+	apiHandler.Handle(baseOneDriveURLPath+"/", http.StripPrefix(baseOneDriveURLPath, mux))
 	apiHandler.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintln(os.Stderr, "FAIL: Client.BaseURL path prefix is not preserved in the request URL:")
 		fmt.Fprintln(os.Stderr)
