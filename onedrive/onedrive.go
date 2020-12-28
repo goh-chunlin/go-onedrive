@@ -168,7 +168,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 
 	if resp.StatusCode == 202 {
 
-		var jsonStream = "{\"Location\": \"" + url.PathEscape(resp.Header["Location"][0]) + "\"}"
+		var jsonStream = "{\"Location\": \"" + resp.Header["Location"][0] + "\"}"
 
 		err = json.NewDecoder(strings.NewReader(jsonStream)).Decode(target)
 
