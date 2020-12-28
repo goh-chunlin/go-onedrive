@@ -40,7 +40,7 @@ func (s *DriveSearchService) Search(ctx context.Context, query string) (*OneDriv
 	}
 
 	var oneDriveResponse *OneDriveDriveSearchResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, false, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (s *DriveSearchService) SearchAll(ctx context.Context, query string) (*OneD
 	}
 
 	var oneDriveResponse *OneDriveDriveSearchResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, false, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}

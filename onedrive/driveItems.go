@@ -114,7 +114,7 @@ func (s *DriveItemsService) List(ctx context.Context, folderId string) (*OneDriv
 	}
 
 	var oneDriveResponse *OneDriveDriveItemsResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, false, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (s *DriveItemsService) ListSpecial(ctx context.Context, folderName DriveSpe
 	}
 
 	var oneDriveResponse *OneDriveDriveItemsResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, false, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func (s *DriveItemsService) Get(ctx context.Context, itemId string) (*DriveItem,
 	}
 
 	var driveItem *DriveItem
-	err = s.client.Do(ctx, req, &driveItem)
+	err = s.client.Do(ctx, req, false, &driveItem)
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +182,7 @@ func (s *DriveItemsService) GetSpecial(ctx context.Context, folderName DriveSpec
 	}
 
 	var driveItem *DriveItem
-	err = s.client.Do(ctx, req, &driveItem)
+	err = s.client.Do(ctx, req, false, &driveItem)
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +229,7 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string,
 	}
 
 	var driveItem *DriveItem
-	err = s.client.Do(ctx, req, &driveItem)
+	err = s.client.Do(ctx, req, false, &driveItem)
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +260,7 @@ func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId s
 	}
 
 	var driveItem *DriveItem
-	err = s.client.Do(ctx, req, &driveItem)
+	err = s.client.Do(ctx, req, false, &driveItem)
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +305,7 @@ func (s *DriveItemsService) Move(ctx context.Context, driveId string, itemId str
 	}
 
 	var response *MoveItemResponse
-	err = s.client.Do(ctx, req, &response)
+	err = s.client.Do(ctx, req, false, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func (s *DriveItemsService) Rename(ctx context.Context, driveId string, itemId s
 	}
 
 	var response *RenameItemResponse
-	err = s.client.Do(ctx, req, &response)
+	err = s.client.Do(ctx, req, false, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -378,7 +378,7 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 		}
 
 		var defaultDrive *Drive
-		err = s.client.Do(ctx, reqDefaultDriveInfo, &defaultDrive)
+		err = s.client.Do(ctx, reqDefaultDriveInfo, false, &defaultDrive)
 		if err != nil {
 			return nil, err
 		}
@@ -407,7 +407,7 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 	}
 
 	var response *CopyItemResponse
-	err = s.client.Do(ctx, req, &response)
+	err = s.client.Do(ctx, req, false, &response)
 	if err != nil {
 		return nil, err
 	}

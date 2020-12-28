@@ -31,7 +31,7 @@ func (s *DriveAsyncJobService) Monitor(ctx context.Context, monitorUrl string) (
 	}
 
 	var oneDriveResponse *OneDriveAsyncJobMonitorResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, true, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}

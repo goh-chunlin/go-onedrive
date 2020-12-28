@@ -133,13 +133,22 @@ func (c *Client) NewRequestToOneDrive(method, absoluteUrl string, body interface
 // Do sends an API request and returns the API response. The API response is
 // JSON decoded and stored in the value pointed to by target, or returned as an
 // error if an API error has occurred.
-func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) error {
+func (c *Client) Do(ctx context.Context, req *http.Request, isUsingPlainHttpClient bool, target interface{}) error {
 	if ctx == nil {
 		return errors.New("context must be non-nil")
 	}
 	req = req.WithContext(ctx)
 
-	resp, err := c.client.Do(req)
+	var err error
+	var resp *http.Response
+
+	if isUsingPlainHttpClient {
+		httpClient := &http.Client{}
+		resp, err = httpClient.Do(req)
+	} else {
+		resp, err = c.client.Do(req)
+	}
+
 	if err != nil {
 		// If we got an error, and the context has been canceled, the error from the context is probably more useful.
 		select {
@@ -180,7 +189,11 @@ func (c *Client) Do(ctx context.Context, req *http.Request, target interface{}) 
 		json.NewDecoder(responseBodyReader).Decode(&oneDriveError)
 
 		if oneDriveError.Error != nil {
-			return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message + " (" + oneDriveError.Error.InnerError.Date + ")")
+			if oneDriveError.Error.InnerError != nil {
+				return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message + " (" + oneDriveError.Error.InnerError.Date + ")")
+			}
+
+			return errors.New(oneDriveError.Error.Code + " - " + oneDriveError.Error.Message)
 		}
 
 		responseBodyReader = bytes.NewReader(responseBody)

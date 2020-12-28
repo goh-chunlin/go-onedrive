@@ -52,7 +52,7 @@ func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error)
 	}
 
 	var defaultDrive *Drive
-	err = s.client.Do(ctx, req, &defaultDrive)
+	err = s.client.Do(ctx, req, false, &defaultDrive)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (s *DrivesService) List(ctx context.Context) (*OneDriveDrivesResponse, erro
 	}
 
 	var oneDriveResponse *OneDriveDrivesResponse
-	err = s.client.Do(ctx, req, &oneDriveResponse)
+	err = s.client.Do(ctx, req, false, &oneDriveResponse)
 	if err != nil {
 		return nil, err
 	}
