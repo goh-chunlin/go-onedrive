@@ -5,9 +5,13 @@
 package onedrive
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"net/url"
+	"os"
+
+	"github.com/h2non/filetype"
 )
 
 // DriveItemsService handles communication with the drive items related methods of the OneDrive API.
@@ -407,6 +411,65 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 	}
 
 	var response *CopyItemResponse
+	err = s.client.Do(ctx, req, false, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+// UploadNewFile is to upload a file to a drive of the authenticated user.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_put_content?view=odsp-graph-online#http-request-to-upload-a-new-file
+func (s *DriveItemsService) UploadNewFile(ctx context.Context, driveId string, destinationParentFolderId string, localFilePath string) (*DriveItem, error) {
+	if destinationParentFolderId == "" {
+		return nil, errors.New("Please provide the destination, i.e. the ID of the parent folder for this new item.")
+	}
+
+	if localFilePath == "" {
+		return nil, errors.New("Please provide the path to the file on local.")
+	}
+
+	file, err := os.Open(localFilePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	if fileInfo.IsDir() {
+		return nil, errors.New("Only file is allowed to be uploaded here.")
+	}
+
+	fileSize := fileInfo.Size()
+
+	fileName := fileInfo.Name()
+
+	apiURL := "me/drive/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content"
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content"
+	}
+
+	buffer := make([]byte, fileSize)
+	file.Read(buffer)
+	fileReader := bytes.NewReader(buffer)
+
+	fileType, _ := filetype.Match(buffer)
+
+	req, err := s.client.NewFileUploadRequest(apiURL, fileType.MIME.Value, fileReader)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *DriveItem
 	err = s.client.Do(ctx, req, false, &response)
 	if err != nil {
 		return nil, err

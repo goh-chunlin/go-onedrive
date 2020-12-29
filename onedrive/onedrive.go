@@ -96,6 +96,30 @@ func (c *Client) NewRequest(method, relativeURL string, body interface{}) (*http
 	return req, err
 }
 
+// NewFileUploadRequest creates an API request to upload files. A relative URL can be provided in relativeURL,
+// in which case it is resolved relative to the BaseURL of the Client.
+// Relative URLs should always be specified WITHOUT a preceding slash.
+func (c *Client) NewFileUploadRequest(relativeURL string, contentType string, fileReader *bytes.Reader) (*http.Request, error) {
+	if !strings.HasSuffix(c.BaseURL.Path, "/") {
+		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not.", c.BaseURL)
+	}
+
+	if fileReader == nil {
+		return nil, errors.New("Please provide the file reader.")
+	}
+
+	apiUrl, err := c.BaseURL.Parse(relativeURL)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a new request using http
+	req, err := http.NewRequest("PUT", apiUrl.String(), fileReader)
+	req.Header.Set("Content-Type", contentType)
+
+	return req, err
+}
+
 // NewRequest creates an API request to OneDrive API directly with an absolute URL.
 func (c *Client) NewRequestToOneDrive(method, absoluteUrl string, body interface{}) (*http.Request, error) {
 	if !strings.HasPrefix(absoluteUrl, oneDriveBaseUrl) && !strings.HasPrefix(absoluteUrl, "/test-onedrive-api") {

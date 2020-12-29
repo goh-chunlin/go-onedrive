@@ -16,6 +16,12 @@ This project is inspired by a few open-source projects, especially the [go-githu
 
 Currently, **go-onedrive requires Golang version 1.15 or greater**.  go-onedrive tracks [Golang version support policy](https://golang.org/doc/devel/release.html#policy). I'll do my best not to break older versions of Golang if I don't have to, but due to tooling constraints, I don't always test older versions.
 
+## Installation ##
+
+```bash
+go get github.com/goh-chunlin/go-onedrive/onedrive
+```
+
 ## Usage ##
 
 ```go
