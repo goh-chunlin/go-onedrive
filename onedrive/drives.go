@@ -37,7 +37,10 @@ type DriveQuota struct {
 	State     string `json:"state"`
 }
 
-// Get a specified drive (or default drive if driveId is empty) of the authenticated user.
+// Get a specified drive of the authenticated user.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_get?view=odsp-graph-online
 func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error) {
