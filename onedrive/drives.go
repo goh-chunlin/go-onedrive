@@ -60,7 +60,7 @@ func (s *DrivesService) Get(ctx context.Context, driveId string) (*Drive, error)
 	return defaultDrive, nil
 }
 
-// List the drives of the authenticated user.
+// List all the drives of the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/drive_list?view=odsp-graph-online
 func (s *DrivesService) List(ctx context.Context) (*OneDriveDrivesResponse, error) {
