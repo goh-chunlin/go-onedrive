@@ -36,6 +36,7 @@ go test -v
 <div align="center">
     <img src="https://gclstorage.blob.core.windows.net/images/MicrosoftGraphAccessToken.png" />
 </div>
+
 *Access Token can be retrieved from the Microsoft Graph Explorer. It will also be auto refreshed.*
 
 Some of the tests are commented out because those test will create/delete/update the 
