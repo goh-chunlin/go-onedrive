@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"net/url"
 	"os"
 
@@ -34,6 +35,12 @@ type DriveItem struct {
 	Description string         `json:"description"`
 	Audio       *OneDriveAudio `json:"audio"`
 	Image       *OneDriveImage `json:"image"`
+	File        *DriveItemFile `json:"file"`
+}
+
+// DriveItemFile represents a OneDrive drive item file info.
+type DriveItemFile struct {
+	MIMEType string `json:"mimeType"`
 }
 
 // NewFolderCreationRequest represents the information needed of a new OneDrive folder to be created.
@@ -531,6 +538,20 @@ func (s *DriveItemsService) UploadToReplaceFile(ctx context.Context, driveId str
 	fileReader := bytes.NewReader(buffer)
 
 	fileType, _ := filetype.Match(buffer)
+
+	targetDriveItem, err := s.Get(ctx, itemId)
+	if err != nil {
+		return nil, err
+	}
+
+	if targetDriveItem.File == nil {
+		return nil, errors.New("It's prohibited to replace a drive item which is not a file.")
+	}
+
+	if targetDriveItem.File.MIMEType != fileType.MIME.Value {
+
+		return nil, fmt.Errorf("It's prohibited to replace a file with MIME Type %q which is not the same type as the uploaded file with MEME Type %q.", targetDriveItem.File.MIMEType, fileType.MIME.Value)
+	}
 
 	req, err := s.client.NewFileUploadRequest(apiURL, fileType.MIME.Value, fileReader)
 	if err != nil {
