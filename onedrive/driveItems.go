@@ -281,8 +281,8 @@ func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId s
 
 // Move a drive item to a new parent folder in a drive of the authenticated user.
 //
-// When moving an item to the root of a drive, we cannot use "root" as the destinationParentFolderId.
-// Instead, we need to provide the actual ID of the root.
+// When moving an item to the root of a drive, for example, we cannot use "root"
+// as the destinationParentFolderId. Instead, we need to provide the actual ID of the root.
 //
 // If driveId is empty, it means the selected drive will be the default drive of
 // the authenticated user.
