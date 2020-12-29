@@ -175,9 +175,11 @@ func (c *Client) Do(ctx context.Context, req *http.Request, isUsingPlainHttpClie
 		return err
 	}
 
-	if resp.StatusCode == 202 {
+	locationHeader, isLocationHeaderExist := resp.Header["Location"]
 
-		var jsonStream = "{\"Location\": \"" + resp.Header["Location"][0] + "\"}"
+	if resp.StatusCode == 202 && isLocationHeaderExist && len(responseBody) == 0 {
+
+		var jsonStream = "{\"Location\": \"" + locationHeader[0] + "\"}"
 
 		err = json.NewDecoder(strings.NewReader(jsonStream)).Decode(target)
 
