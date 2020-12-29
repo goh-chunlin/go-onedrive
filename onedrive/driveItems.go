@@ -38,9 +38,9 @@ type DriveItem struct {
 
 // NewFolderCreationRequest represents the information needed of a new OneDrive folder to be created.
 type NewFolderCreationRequest struct {
-	FolderName  string `json:"name"`
-	FolderFacet Facet  `json:"folder"`
-	Restriction string `json:"@microsoft.graph.conflictBehavior"`
+	FolderName       string `json:"name"`
+	FolderFacet      Facet  `json:"folder"`
+	ConflictBehavior string `json:"@microsoft.graph.conflictBehavior"`
 }
 
 // Facet represents one of the facets for a folder or file.
@@ -222,9 +222,9 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string,
 	folderFacet := &Facet{}
 
 	newFolder := &NewFolderCreationRequest{
-		FolderName:  folderName,
-		FolderFacet: *folderFacet,
-		Restriction: "rename",
+		FolderName:       folderName,
+		FolderFacet:      *folderFacet,
+		ConflictBehavior: "rename",
 	}
 
 	req, err := s.client.NewRequest("POST", apiURL, newFolder)
@@ -421,6 +421,9 @@ func (s *DriveItemsService) Copy(ctx context.Context, sourceDriveId string, item
 
 // UploadNewFile is to upload a file to a drive of the authenticated user.
 //
+// By default, this API will upload and then rename an item if there is an existing item
+// with the same name on OneDrive.
+//
 // If driveId is empty, it means the selected drive will be the default drive of
 // the authenticated user.
 //
@@ -453,9 +456,9 @@ func (s *DriveItemsService) UploadNewFile(ctx context.Context, driveId string, d
 
 	fileName := fileInfo.Name()
 
-	apiURL := "me/drive/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content"
+	apiURL := "me/drive/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content?@microsoft.graph.conflictBehavior=rename"
 	if driveId != "" {
-		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content"
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content?@microsoft.graph.conflictBehavior=rename"
 	}
 
 	buffer := make([]byte, fileSize)
