@@ -454,6 +454,10 @@ func (s *DriveItemsService) UploadNewFile(ctx context.Context, driveId string, d
 
 	fileSize := fileInfo.Size()
 
+	if fileSize > 4*1024*1024 {
+		return nil, errors.New("Only file with size less than or equal to 4MB is allowed to be uploaded here.")
+	}
+
 	fileName := fileInfo.Name()
 
 	apiURL := "me/drive/items/" + url.PathEscape(destinationParentFolderId) + ":/" + url.PathEscape(fileName) + ":/content?@microsoft.graph.conflictBehavior=rename"
