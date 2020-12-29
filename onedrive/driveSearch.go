@@ -25,8 +25,8 @@ type OneDriveDriveSearchResponse struct {
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_search?view=odsp-graph-online#request
 func (s *DriveSearchService) Search(ctx context.Context, query string) (*OneDriveDriveSearchResponse, error) {
-	// For requests that use single quotes, if any parameter values
-	// also contain single quotes, those must be double escaped; otherwise,
+	// For requests that use single quotes, if there are parameter values
+	// also containing single quotes, those must be double escaped; otherwise,
 	// the request will fail due to invalid syntax.
 	//
 	// Reference: https://docs.microsoft.com/en-us/graph/query-parameters
