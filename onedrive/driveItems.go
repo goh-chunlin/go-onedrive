@@ -484,3 +484,64 @@ func (s *DriveItemsService) UploadNewFile(ctx context.Context, driveId string, d
 
 	return response, nil
 }
+
+// UploadToReplaceFile is to upload a file to replace an existing file in a drive of the authenticated user.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_put_content?view=odsp-graph-online#http-request-to-replace-an-existing-item
+func (s *DriveItemsService) UploadToReplaceFile(ctx context.Context, driveId string, localFilePath string, itemId string) (*DriveItem, error) {
+	if localFilePath == "" {
+		return nil, errors.New("Please provide the path to the file on local.")
+	}
+
+	if itemId == "" {
+		return nil, errors.New("Please provide the id of the existing item to replace.")
+	}
+
+	file, err := os.Open(localFilePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	if fileInfo.IsDir() {
+		return nil, errors.New("Only file is allowed to be uploaded here.")
+	}
+
+	fileSize := fileInfo.Size()
+
+	if fileSize > 4*1024*1024 {
+		return nil, errors.New("Only file with size less than or equal to 4MB is allowed to be uploaded here.")
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/content"
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(itemId) + "/content"
+	}
+
+	buffer := make([]byte, fileSize)
+	file.Read(buffer)
+	fileReader := bytes.NewReader(buffer)
+
+	fileType, _ := filetype.Match(buffer)
+
+	req, err := s.client.NewFileUploadRequest(apiURL, fileType.MIME.Value, fileReader)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *DriveItem
+	err = s.client.Do(ctx, req, false, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
