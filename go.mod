@@ -1,7 +1,5 @@
-module github.com/goh-chunlin/go-onedrive/v1
+module github.com/goh-chunlin/go-onedrive/onedrive/v1
 
 go 1.15
 
-require (
-	github.com/h2non/filetype v1.1.0
-)
+require github.com/h2non/filetype v1.1.0
