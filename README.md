@@ -7,6 +7,7 @@
 ![Go Build](https://github.com/goh-chunlin/go-onedrive/workflows/Go%20Build/badge.svg?branch=main)
 ![CodeQL Scan](https://github.com/goh-chunlin/go-onedrive/workflows/CodeQL%20Scan/badge.svg?branch=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/goh-chunlin/go-onedrive)](https://goreportcard.com/report/github.com/goh-chunlin/go-onedrive)
+[![Go Reference](https://pkg.go.dev/badge/github.com/goh-chunlin/go-onedrive.svg)](https://pkg.go.dev/github.com/goh-chunlin/go-onedrive)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.buymeacoffee.com/chunlin)
 
