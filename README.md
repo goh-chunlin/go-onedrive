@@ -89,7 +89,7 @@ Hence, API methods will likely be implemented in the order that they are needed 
 
 ## Sensei Projects ##
 
-Special thanks to the following projects for providing useful references to me on this library.
+Special thanks go to the following projects for providing useful references which help me in the development of this library.
 - [google/go-github](https://github.com/google/go-github);
 - [ggordan/go-onedrive](https://github.com/ggordan/go-onedrive);
 - [googleapis/google-api-go-client](https://github.com/googleapis/google-api-go-client).
