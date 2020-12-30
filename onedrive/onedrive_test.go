@@ -21,7 +21,7 @@ const (
 	baseOneDriveURLPath = "/test-onedrive-api"
 )
 
-// setup sets up a test HTTP server along with a github.Client that is
+// setup sets up a test HTTP server along with a onedrive.Client that is
 // configured to talk to that test server. Tests should register handlers on
 // mux which provide mock responses for the API method being tested.
 func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown func()) {
