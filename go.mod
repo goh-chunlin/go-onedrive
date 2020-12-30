@@ -1,4 +1,4 @@
-module github.com/goh-chunlin/go-onedrive/onedrive
+module github.com/goh-chunlin/go-onedrive
 
 go 1.15
 
