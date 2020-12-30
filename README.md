@@ -20,7 +20,7 @@ Currently, **go-onedrive requires Golang version 1.15 or greater**.  go-onedrive
 ## Installation ##
 
 ```bash
-go get github.com/goh-chunlin/go-onedrive/onedrive
+go get github.com/goh-chunlin/go-onedrive
 ```
 
 ## Usage ##
