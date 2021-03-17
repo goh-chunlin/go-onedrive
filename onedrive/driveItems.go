@@ -29,18 +29,24 @@ type OneDriveDriveItemsResponse struct {
 
 // DriveItem represents a OneDrive drive item.
 type DriveItem struct {
-	Name        string         `json:"name"`
-	Id          string         `json:"id"`
-	DownloadURL string         `json:"@microsoft.graph.downloadUrl"`
-	Description string         `json:"description"`
-	Audio       *OneDriveAudio `json:"audio"`
-	Image       *OneDriveImage `json:"image"`
-	File        *DriveItemFile `json:"file"`
+	Name        string           `json:"name"`
+	Id          string           `json:"id"`
+	DownloadURL string           `json:"@microsoft.graph.downloadUrl"`
+	Description string           `json:"description"`
+	Audio       *OneDriveAudio   `json:"audio"`
+	Image       *OneDriveImage   `json:"image"`
+	File        *DriveItemFile   `json:"file"`
+	Folder      *DriveItemFolder `json:"folder"`
 }
 
 // DriveItemFile represents a OneDrive drive item file info.
 type DriveItemFile struct {
 	MIMEType string `json:"mimeType"`
+}
+
+// DriveItemFolder represents a OneDrive drive item folder info.
+type DriveItemFolder struct {
+	ChildCount int32 `json:"childCount"`
 }
 
 // NewFolderCreationRequest represents the information needed of a new OneDrive folder to be created.
