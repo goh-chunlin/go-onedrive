@@ -28,13 +28,17 @@ type OneDriveDriveItemsResponse struct {
 }
 
 // DriveItem represents a OneDrive drive item.
+// Ref https://docs.microsoft.com/en-us/graph/api/resources/driveitem?view=graph-rest-1.0
 type DriveItem struct {
 	Name        string           `json:"name"`
 	Id          string           `json:"id"`
 	DownloadURL string           `json:"@microsoft.graph.downloadUrl"`
 	Description string           `json:"description"`
+	WebURL      string           `json:"webUrl"`
 	Audio       *OneDriveAudio   `json:"audio"`
+	Video       *OneDriveVideo   `json:"video"`
 	Image       *OneDriveImage   `json:"image"`
+	Photo       *OneDrivePhoto   `json:"photo"`
 	File        *DriveItemFile   `json:"file"`
 	Folder      *DriveItemFolder `json:"folder"`
 }
@@ -114,6 +118,21 @@ type OneDriveAudio struct {
 type OneDriveImage struct {
 	Height float64 `json:"height"`
 	Width  float64 `json:"width"`
+}
+
+// OneDrivePhoto represents the photo metadata of a OneDrive drive item which is a photo.
+// Ref https://docs.microsoft.com/en-us/graph/api/resources/photo?view=graph-rest-1.0
+type OneDrivePhoto struct {
+	CameraMake  string `json:"cameraMake"`
+	CameraModel string `json:"cameraModel"`
+}
+
+// OneDriveVideo represents the video metadata of a OneDrive drive item.
+// Ref: https://docs.microsoft.com/en-us/graph/api/resources/video?view=graph-rest-1.0
+type OneDriveVideo struct {
+	Duration int     `json:"duration"`
+	Height   float64 `json:"height"`
+	Width    float64 `json:"width"`
 }
 
 // List the items of a folder in the default drive of the authenticated user.
