@@ -36,10 +36,11 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the OneDrive API.
-	Drives        *DrivesService
-	DriveItems    *DriveItemsService
-	DriveSearch   *DriveSearchService
-	DriveAsyncJob *DriveAsyncJobService
+	Drives           *DrivesService
+	DriveItems       *DriveItemsService
+	DriveSearch      *DriveSearchService
+	DriveAsyncJob    *DriveAsyncJobService
+	DrivePermissions *PermissionService
 }
 
 // NewClient returns a new OneDrive API client. If a nil httpClient is
@@ -60,6 +61,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.DriveItems = (*DriveItemsService)(&c.common)
 	c.DriveSearch = (*DriveSearchService)(&c.common)
 	c.DriveAsyncJob = (*DriveAsyncJobService)(&c.common)
+	c.DrivePermissions = (*PermissionService)(&c.common)
 
 	return c
 }
