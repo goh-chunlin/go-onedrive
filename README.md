@@ -84,6 +84,8 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [x] Delete
     - [x] Move
     - [x] Rename
+	- [x] Create share link to the item
+	- [x] List share links of the item
     - [x] Upload simple item size < 4MB
     - [x] Upload and then replace with item size < 4MB
 
