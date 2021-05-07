@@ -78,14 +78,16 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [x] List children (items)
     - [x] Move
     - [x] Rename
+	- [x] Create share link to a folder and its content
+	- [x] List share links of a folder
 - [x] Items
 	- [x] Get individual item	
 	- [x] Copy
 	- [x] Delete
     - [x] Move
     - [x] Rename	
-	- [x] Create share link to the item
-	- [x] List share links of the item
+	- [x] Create share link to an item
+	- [x] List share links of an item
     - [x] Upload simple item size < 4MB
     - [x] Upload and then replace with item size < 4MB
 
