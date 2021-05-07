@@ -1,0 +1,13 @@
+{
+    "id": "123ABC",
+    "roles": ["write"],
+    "link": {
+        "type": "view",
+        "scope": "anonymous",
+        "webUrl": "https://1drv.ms/A6913278E564460AA616C71B28AD6EB6",
+        "application": {
+            "id": "1234",
+            "displayName": "Sample Application"
+        }
+    }
+}
