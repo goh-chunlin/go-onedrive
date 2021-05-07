@@ -1,0 +1,39 @@
+
+{
+    "value": [
+        {
+            "id": "1",
+            "roles": ["write"],
+            "link": {
+                "webUrl": "https://onedrive.live.com/redir?resid=5D33DD65C6932946!70859&authkey=!AL7N1QAfSWcjNU8&ithint=folder%2cgif",
+                "type": "edit"
+            }
+        },
+        {
+            "id": "2",
+            "roles": ["write"],
+            "grantedTo": {
+                "user": {
+                    "id": "5D33DD65C6932946",
+                    "displayName": "John Doe"
+                }
+            },
+            "inheritedFrom": {
+                "driveId": "1234567890ABD",
+                "id": "1234567890ABC!123",
+                "path": "/drive/root:/Documents" }
+        },
+        {
+            "id": "3",
+            "roles": ["write"],
+            "link": {
+                "webUrl": "https://onedrive.live.com/redir?resid=5D33DD65C6932946!70859&authkey=!AL7N1QAfSWcjNU8&ithint=folder%2cgif",
+                "type": "edit",
+                "application": {
+                    "id": "12345",
+                    "displayName": "Contoso Time Manager"
+                }
+            }
+        }
+    ]
+}
