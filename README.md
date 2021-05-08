@@ -27,12 +27,12 @@ In the go.mod file, please make sure the correct package with the correct versio
 ...
 
 require (
-	github.com/goh-chunlin/go-onedrive v1.0.10
+	github.com/goh-chunlin/go-onedrive v1.1.0
 	...
 )
 ```
 
-The current latest version should be **v1.0.10** (updated on **17th March 2021**, as shown on the [Releases page](https://github.com/goh-chunlin/go-onedrive/releases)).
+The current latest version should be **v1.1.0** (updated on **8th May 2021**, as shown on the [Releases page](https://github.com/goh-chunlin/go-onedrive/releases)).
 
 In other go source files, you can then import the go-onedrive library as follows.
 ```go
