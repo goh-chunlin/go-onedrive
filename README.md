@@ -17,14 +17,24 @@ This project is inspired by a few open-source projects, especially the [go-githu
 
 Currently, **go-onedrive requires Golang version 1.15 or greater**.  go-onedrive tracks [Golang version support policy](https://golang.org/doc/devel/release.html#policy). I'll do my best not to break older versions of Golang if I don't have to, but due to tooling constraints, I don't always test older versions.
 
-## Installation ##
+## Getting Started ##
 
-```bash
-go get github.com/goh-chunlin/go-onedrive
+Module support was introduced in Go 1.15. Starting from Go 1.16, module-aware mode is enabled by default. Hence, I'll assume the module-aware mode is enabled when using this library.
+
+In the go.mod file, please make sure the correct package with the correct version is used.
+
+```
+...
+
+require (
+	github.com/goh-chunlin/go-onedrive v1.0.10
+	...
+)
 ```
 
-## Usage ##
+The current latest version should be **v1.0.10** (updated on **17th March 2021**, as shown on the [Releases page](https://github.com/goh-chunlin/go-onedrive/releases)).
 
+In other go source files, you can then import the go-onedrive library as follows.
 ```go
 import "github.com/goh-chunlin/go-onedrive/onedrive"
 ```

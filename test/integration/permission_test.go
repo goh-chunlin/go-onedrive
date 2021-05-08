@@ -11,7 +11,7 @@ import (
 func TestPermission_CreateAnynomousViewLink(t *testing.T) {
 	// ctx, client := setup()
 
-	// permission, err := client.DrivePermissions.CreateShareLink(ctx, "<<input>>", "view", "anonymous")
+	// permission, err := client.DrivePermissions.CreateShareLink(ctx, "<<input>>", onedrive.View, onedrive.Anonymous)
 	// if err != nil {
 	// 	fmt.Printf("Error: %v\n", err)
 	// 	return

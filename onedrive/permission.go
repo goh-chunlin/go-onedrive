@@ -2,8 +2,8 @@ package onedrive
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"net/url"
 )
 
 // PermissionService handles permission settings of a drive item
@@ -37,10 +37,10 @@ type SharingLink struct {
 // If a sharing link of the specified type already exists for the app, the existing sharing link will be returned.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_createlink?view=odsp-graph-online
-func (s *PermissionService) CreateShareLink(ctx context.Context, itemID, permissionType, permissionScope string) (*Permission, error) {
-	apiURL := fmt.Sprintf("me/drive/items/%s/createLink", itemID)
+func (s *PermissionService) CreateShareLink(ctx context.Context, itemId string, permissionType ShareLinkType, permissionScope ShareLinkScope) (*Permission, error) {
+	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/createLink"
 
-	body := &CreateShareLinkRequest{Type: permissionType, Scope: permissionScope}
+	body := &CreateShareLinkRequest{Type: permissionType.toString(), Scope: permissionScope.toString()}
 	req, err := s.client.NewRequest(http.MethodPost, apiURL, body)
 	if err != nil {
 		return nil, err
@@ -61,9 +61,10 @@ type ListPermissionsResponse struct {
 }
 
 // List lists the effective sharing permissions of on a DriveItem.
+//
 // OneDrive API docs:  https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_list_permissions?view=odsp-graph-online
-func (s *PermissionService) List(ctx context.Context, itemID string) ([]Permission, error) {
-	apiURL := fmt.Sprintf("me/drive/items/%s/permissions", itemID)
+func (s *PermissionService) List(ctx context.Context, itemId string) ([]Permission, error) {
+	apiURL := "me/drive/items/" + url.PathEscape(itemId) + "/permissions"
 
 	req, err := s.client.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {

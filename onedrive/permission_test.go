@@ -22,7 +22,7 @@ func TestCreateSharingLink(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	gotOneDriveResponse, err := client.DrivePermissions.CreateShareLink(ctx, "1", "read", "anonymous")
+	gotOneDriveResponse, err := client.DrivePermissions.CreateShareLink(ctx, "1", View, Anonymous)
 	if err != nil {
 		t.Errorf("CreateShareLink returned error: %v", err)
 	}
