@@ -2,6 +2,7 @@ package onedrive
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/url"
 )
@@ -78,4 +79,37 @@ func (s *PermissionService) List(ctx context.Context, itemId string) ([]Permissi
 	}
 
 	return oneDriveResponse.Value, nil
+}
+
+// Delete will delete a sharing permission from a file or folder.
+// Only sharing permissions that are not inherited can be deleted. The inheritedFrom property must be null.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_delete?view=odsp-graph-online
+func (s *PermissionService) Delete(ctx context.Context, driveId string, itemId string, permissionId string) error {
+	if itemId == "" {
+		return errors.New("Please provide the Item ID of the item to be deleted.")
+	}
+
+	apiURL := "me/drive/items/" + url.PathEscape(itemId)
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(itemId)
+	}
+
+	apiURL += "/permissions/" + url.PathEscape(permissionId)
+
+	req, err := s.client.NewRequest("DELETE", apiURL, nil)
+	if err != nil {
+		return err
+	}
+
+	var driveItem *DriveItem
+	err = s.client.Do(ctx, req, false, &driveItem)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

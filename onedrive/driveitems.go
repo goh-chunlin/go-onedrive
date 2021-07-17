@@ -273,16 +273,16 @@ func (s *DriveItemsService) CreateNewFolder(ctx context.Context, driveId string,
 	return driveItem, nil
 }
 
-// Delete a drive item in a drive of the authenticated user.
+// Delete will delete a drive item in a drive of the authenticated user.
 // The deleted item will be moved to the Recycle Bin instead of getting permanently deleted.
 //
 // If driveId is empty, it means the selected drive will be the default drive of
 // the authenticated user.
 //
 // OneDrive API docs: https://docs.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_delete?view=odsp-graph-online
-func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId string) (*DriveItem, error) {
+func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId string) error {
 	if itemId == "" {
-		return nil, errors.New("Please provide the Item ID of the item to be deleted.")
+		return errors.New("Please provide the Item ID of the item to be deleted.")
 	}
 
 	apiURL := "me/drive/items/" + url.PathEscape(itemId)
@@ -290,18 +290,12 @@ func (s *DriveItemsService) Delete(ctx context.Context, driveId string, itemId s
 		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(itemId)
 	}
 
-	req, err := s.client.NewRequest("DELETE", apiURL, nil)
+	_, err := s.client.NewRequest("DELETE", apiURL, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	var driveItem *DriveItem
-	err = s.client.Do(ctx, req, false, &driveItem)
-	if err != nil {
-		return nil, err
-	}
-
-	return driveItem, nil
+	return nil
 }
 
 // Move a drive item to a new parent folder in a drive of the authenticated user.

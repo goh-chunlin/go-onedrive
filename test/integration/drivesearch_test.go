@@ -14,7 +14,7 @@ func TestDriveSearch_Search(t *testing.T) {
 
 	searchDriveItems, err := client.DriveSearch.SearchAll(ctx, "Shana")
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		t.Errorf("Error: %v\n", err)
 		return
 	}
 	for _, driveItem := range searchDriveItems.DriveItems {

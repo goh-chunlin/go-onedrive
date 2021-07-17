@@ -105,7 +105,7 @@ func TestDriveItems_Move(t *testing.T) {
 func TestDriveItems_Delete(t *testing.T) {
 	// ctx, client := setup()
 
-	// _, err := client.DriveItems.Delete(ctx, "", "<<input>>")
+	// err := client.DriveItems.Delete(ctx, "", "<<input>>")
 	// if err != nil {
 	// 	t.Errorf("Error: %v\n", err)
 	// 	return
