@@ -51,7 +51,7 @@ tc := oauth2.NewClient(ctx, ts)
 client := onedrive.NewClient(tc)
 
 // list all OneDrive drives for the current logged in user
-drives, err := onedrive.Drives.List(ctx)
+drives, err := client.Drives.List(ctx)
 ```
 
 NOTE: Using the [context](https://godoc.org/context) package, one can easily pass cancelation signals and deadlines to various services of the client for handling a request. In case there is no context available, then `context.Background()` can be used as a starting point.
