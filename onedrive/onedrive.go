@@ -214,7 +214,9 @@ func (c *Client) Do(ctx context.Context, req *http.Request, isUsingPlainHttpClie
 		responseBodyReader := bytes.NewReader(responseBody)
 
 		var oneDriveError *ErrorResponse
-		json.NewDecoder(responseBodyReader).Decode(&oneDriveError)
+		if err = json.NewDecoder(responseBodyReader).Decode(&oneDriveError); err != nil {
+			return err
+		}
 
 		if oneDriveError.Error != nil {
 			if oneDriveError.Error.InnerError != nil {
