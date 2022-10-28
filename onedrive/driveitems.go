@@ -7,8 +7,10 @@ package onedrive
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/url"
 	"os"
 
@@ -584,4 +586,37 @@ func (s *DriveItemsService) UploadToReplaceFile(ctx context.Context, driveId str
 	}
 
 	return response, nil
+}
+
+// DownloadItem downloads the given item from OneDrive
+func (s *DriveItemsService) DownloadItem(ctx context.Context, item *DriveItem) ([]byte, error) {
+	if item.DownloadURL == "" {
+		var err error
+		item, err = s.Get(ctx, item.Id)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	resp, err := s.client.client.Get(item.DownloadURL)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		var errResp ErrorResponse
+		if err := json.Unmarshal(body, &errResp); err != nil {
+			return nil, err
+		}
+		if errResp.Error == nil {
+			return nil, fmt.Errorf("%s: %s", resp.Status, string(body))
+		}
+		return nil, errors.New(errResp.Error.Code + ": " + errResp.Error.Message)
+	}
+	return body, nil
 }
