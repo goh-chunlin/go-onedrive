@@ -5,6 +5,7 @@
 package onedrive
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -60,6 +61,26 @@ type NewFolderCreationRequest struct {
 	FolderName       string `json:"name"`
 	FolderFacet      Facet  `json:"folder"`
 	ConflictBehavior string `json:"@microsoft.graph.conflictBehavior"`
+}
+
+// NewUploadSessionCreationRequest represents the information needed of a new Upload Session to be created.
+type NewUploadSessionCreationRequest struct {
+	FileName         string `json:"name"`
+	FileDescription  string `json:"description,omitempty"`
+	ConflictBehavior string `json:"@microsoft.graph.conflictBehavior"`
+}
+
+// NewUploadSessionCreationResponse  represent the JSON object returned by the OneDrive API after requesting an upload session
+type NewUploadSessionCreationResponse struct {
+	UploadURL          string `json:"uploadUrl"`
+	ExpirationDateTime string `json:"expirationDateTime"`
+}
+
+type UploadSessionUploadResponse struct {
+	ExpirationDateTime string   `json:"expirationDateTime"`
+	NextExpectedRanges []string `json:"nextExpectedRanges"`
+	//using anonymous struct to store fileInfo. ONLY if the transaction completed
+	DriveItem
 }
 
 // Facet represents one of the facets for a folder or file.
@@ -586,6 +607,134 @@ func (s *DriveItemsService) UploadToReplaceFile(ctx context.Context, driveId str
 	}
 
 	return response, nil
+}
+
+// UploadNewFileLarge is to upload a large file (> 4mb) to a drive of the authenticated user.
+//
+// It is recommended to upload large files using a new goroutine.
+//
+// By default, this API will upload and then rename an item if there is an existing item
+// with the same name on OneDrive.
+//
+// If driveId is empty, it means the selected drive will be the default drive of
+// the authenticated user.
+//
+// OneDrive API docs: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_createuploadsession
+func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId string, destinationParentFolderId string, localFilePath string, sizePerSplit int64) (*DriveItem, error) {
+	if destinationParentFolderId == "" {
+		return nil, errors.New("Please provide the destination, i.e. the ID of the parent folder for this new item.")
+	}
+
+	if localFilePath == "" {
+		return nil, errors.New("Please provide the path to the file on local.")
+	}
+
+	file, err := os.Open(localFilePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	if fileInfo.IsDir() {
+		return nil, errors.New("Only file is allowed to be uploaded here.")
+	}
+
+	fileSize := fileInfo.Size()
+
+	//if size per split is set to zero, we will try to upload the file as a whole
+	if sizePerSplit == 0 {
+		if fileSize > 60*1024*1024 {
+			return nil, errors.New("Only file with size less than or equal to 60MB is allowed to be uploaded in a single split")
+		}
+	}
+
+	//range should be a multiple of 320 KiB
+	//see: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_createuploadsession?view=odsp-graph-online#upload-bytes-to-the-upload-session
+	if sizePerSplit%(320*1024) != 0 {
+		return nil, errors.New("Size per split should be a multiple of 320 KiB (327,680 bytes)")
+	}
+
+	fileName := fileInfo.Name()
+
+	apiURL := fmt.Sprintf("me/drive/items/%s:/%s:/createUploadSession", url.PathEscape(destinationParentFolderId), fileName)
+
+	if driveId != "" {
+		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(destinationParentFolderId) + "/createUploadSession"
+	}
+
+	sessionCreationRequestInside := NewUploadSessionCreationRequest{
+		FileName:         fileName,
+		ConflictBehavior: "replace",
+	}
+
+	sessionCreationRequest := struct {
+		Item        NewUploadSessionCreationRequest `json:"item"`
+		DeferCommit bool                            `json:"deferCommit"`
+	}{sessionCreationRequestInside, false}
+
+	//todo: fix the malfunctioned optional json
+	sessionCreationReq, err := s.client.NewRequest("POST", apiURL, struct{}{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	var sessionCreationResp *NewUploadSessionCreationResponse
+	err = s.client.Do(ctx, sessionCreationReq, false, &sessionCreationResp)
+	//debug
+	if err != nil {
+		b, _ := json.Marshal(sessionCreationRequest)
+		fmt.Println("URL:" + sessionCreationReq.URL.String())
+		fmt.Printf("Parameters:\r%v\r\n", string(b))
+		return nil, fmt.Errorf("session creation failed %w", err)
+	}
+
+	fileSessionUploadUrl := sessionCreationResp.UploadURL
+
+	//if sizePerSplit is 0, upload the whole file
+
+	if sizePerSplit == 0 {
+		sizePerSplit = fileSize
+	}
+
+	buffer := make([]byte, sizePerSplit)
+	splitCount := fileSize / sizePerSplit
+	if fileSize%sizePerSplit != 0 {
+		splitCount += 1
+	}
+	bfReader := bufio.NewReader(file)
+	var fileUploadResp *UploadSessionUploadResponse
+	for splitNow := int64(0); splitNow < splitCount; splitNow++ {
+		length, err := bfReader.Read(buffer)
+		//should not reach EOF or other type of error.
+		if err != nil {
+			return nil, err
+		}
+		if int64(length) < sizePerSplit {
+			bufferLast := buffer[:length]
+			buffer = bufferLast
+		}
+		sessionFileUploadReq, err := s.client.NewSessionFileUploadRequest(fileSessionUploadUrl, splitNow*sizePerSplit, fileSize, bytes.NewReader(buffer))
+		if err != nil {
+			return nil, err
+		}
+
+		err = s.client.Do(ctx, sessionFileUploadReq, false, &fileUploadResp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	//something went wrong, it does not return a completed file
+	if fileUploadResp.Id == "" {
+		return &fileUploadResp.DriveItem, errors.New("something went wrong. not a completed file.")
+	}
+
+	return &fileUploadResp.DriveItem, nil
 }
 
 // DownloadItem downloads the given item from OneDrive
