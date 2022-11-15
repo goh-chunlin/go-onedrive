@@ -65,9 +65,9 @@ type NewFolderCreationRequest struct {
 
 // NewUploadSessionCreationRequest represents the information needed of a new Upload Session to be created.
 type NewUploadSessionCreationRequest struct {
-	FileName         string `json:"name"`
-	FileDescription  string `json:"description,omitempty"`
-	ConflictBehavior string `json:"@microsoft.graph.conflictBehavior"`
+	//Will cause unknown malformed request error, so disabled for now.
+	//FileName         string `json:"name,omitempty"`
+	ConflictBehavior string `json:"@microsoft.graph.conflictBehavior,omitempty"`
 }
 
 // NewUploadSessionCreationResponse  represent the JSON object returned by the OneDrive API after requesting an upload session
@@ -611,13 +611,16 @@ func (s *DriveItemsService) UploadToReplaceFile(ctx context.Context, driveId str
 
 // UploadNewFileLarge is to upload a large file (> 4mb) to a drive of the authenticated user.
 //
-// It is recommended to upload large files using a new goroutine.
+// This might take a long time, please consider using a new goroutine.
 //
 // By default, this API will upload and then rename an item if there is an existing item
 // with the same name on OneDrive.
 //
 // If driveId is empty, it means the selected drive will be the default drive of
 // the authenticated user.
+//
+// The recommended splitting size is 5-10 MiB, depending on your internet connection.
+// Per Microsoft API, the size per split MUST BE a multiple of 320 KiB (320 * 1024)
 //
 // OneDrive API docs: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_createuploadsession
 func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId string, destinationParentFolderId string, localFilePath string, sizePerSplit int64) (*DriveItem, error) {
@@ -649,8 +652,12 @@ func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId stri
 	//if size per split is set to zero, we will try to upload the file as a whole
 	if sizePerSplit == 0 {
 		if fileSize > 60*1024*1024 {
-			return nil, errors.New("Only file with size less than or equal to 60MB is allowed to be uploaded in a single split")
+			return nil, errors.New("Only file with size less than or equal to 60MiB is allowed to be uploaded in a single split")
 		}
+	} else if sizePerSplit < 0 {
+		return nil, errors.New("Size per split must be a positive number")
+	} else if sizePerSplit > 60*1024*1024 {
+		return nil, errors.New("Size per split must be lesser than 60MiB")
 	}
 
 	//range should be a multiple of 320 KiB
@@ -663,22 +670,24 @@ func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId stri
 
 	apiURL := fmt.Sprintf("me/drive/items/%s:/%s:/createUploadSession", url.PathEscape(destinationParentFolderId), fileName)
 
+	//Did not find an official API for designated drive, I'll just keep the api in the same format.
 	if driveId != "" {
-		apiURL = "me/drives/" + url.PathEscape(driveId) + "/items/" + url.PathEscape(destinationParentFolderId) + "/createUploadSession"
+		apiURL = fmt.Sprintf("me/drives/%s/items/%s:/%s:/createUploadSession", url.PathEscape(driveId), url.PathEscape(destinationParentFolderId), fileName)
 	}
 
 	sessionCreationRequestInside := NewUploadSessionCreationRequest{
-		FileName:         fileName,
-		ConflictBehavior: "replace",
+		//select from: rename | fail | replace
+		ConflictBehavior: "rename",
 	}
 
 	sessionCreationRequest := struct {
-		Item        NewUploadSessionCreationRequest `json:"item"`
-		DeferCommit bool                            `json:"deferCommit"`
+		Item NewUploadSessionCreationRequest `json:"item"`
+		//found a "deferCommit" flag in Graph API, but not in onedrive api.
+		//docs: https://learn.microsoft.com/en-us/graph/api/driveitem-createuploadsession?view=graph-rest-1.0
+		DeferCommit bool `json:"deferCommit"`
 	}{sessionCreationRequestInside, false}
 
-	//todo: fix the malfunctioned optional json
-	sessionCreationReq, err := s.client.NewRequest("POST", apiURL, struct{}{})
+	sessionCreationReq, err := s.client.NewRequest("POST", apiURL, sessionCreationRequest)
 
 	if err != nil {
 		return nil, err
@@ -686,22 +695,23 @@ func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId stri
 
 	var sessionCreationResp *NewUploadSessionCreationResponse
 	err = s.client.Do(ctx, sessionCreationReq, false, &sessionCreationResp)
-	//debug
 	if err != nil {
-		b, _ := json.Marshal(sessionCreationRequest)
-		fmt.Println("URL:" + sessionCreationReq.URL.String())
-		fmt.Printf("Parameters:\r%v\r\n", string(b))
+		//debug
+		//b, _ := json.Marshal(sessionCreationRequest)
+		//fmt.Println("URL:" + sessionCreationReq.URL.String())
+		//fmt.Printf("Parameters:\r%v\r\n", string(b))
 		return nil, fmt.Errorf("session creation failed %w", err)
 	}
 
 	fileSessionUploadUrl := sessionCreationResp.UploadURL
 
-	//if sizePerSplit is 0, upload the whole file
+	//if sizePerSplit is 0, upload the whole file without splitting it.
 
 	if sizePerSplit == 0 {
 		sizePerSplit = fileSize
 	}
 
+	//buffer for storing splitted file
 	buffer := make([]byte, sizePerSplit)
 	splitCount := fileSize / sizePerSplit
 	if fileSize%sizePerSplit != 0 {
@@ -719,11 +729,15 @@ func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId stri
 			bufferLast := buffer[:length]
 			buffer = bufferLast
 		}
+		//construct the request to temporary uploadSession location
 		sessionFileUploadReq, err := s.client.NewSessionFileUploadRequest(fileSessionUploadUrl, splitNow*sizePerSplit, fileSize, bytes.NewReader(buffer))
 		if err != nil {
 			return nil, err
 		}
 
+		//execute the PUT query
+		//UploadSessionUploadResponse is an *compounded* structure that will NOT include a DriveItem struct
+		//before finalizing the file upload.
 		err = s.client.Do(ctx, sessionFileUploadReq, false, &fileUploadResp)
 		if err != nil {
 			return nil, err
@@ -731,7 +745,7 @@ func (s *DriveItemsService) UploadNewFileLarge(ctx context.Context, driveId stri
 	}
 	//something went wrong, it does not return a completed file
 	if fileUploadResp.Id == "" {
-		return &fileUploadResp.DriveItem, errors.New("something went wrong. not a completed file.")
+		return &fileUploadResp.DriveItem, errors.New("something went wrong. file upload incomplete. consider upload the file in a step-by-step manner")
 	}
 
 	return &fileUploadResp.DriveItem, nil

@@ -169,13 +169,16 @@ func TestDriveItems_UploadNewFileLarge(t *testing.T) {
 	ctx, client := setup()
 	folderID := ""
 	fileLoc := ""
-	uploadedDriveItem, err := client.DriveItems.UploadNewFileLarge(ctx, "", folderID, fileLoc, 320*1024*4)
+	//split a large file by 1280 KiB (3*320 KiB) and upload to upload session, unlimited total size
+	//recommended: 5-10 mb
+	uploadedDriveItem, err := client.DriveItems.UploadNewFileLarge(ctx, "", folderID, fileLoc, 320*1024*16)
 	if err != nil {
 		t.Errorf("Error: %v\n", err)
 		return
 	}
-	//
-	fmt.Printf("FINISHED")
+	//upload a large file without splitting (can handle file <60MB)
+	fmt.Printf("Uploaded DriveItem: %v\n", uploadedDriveItem)
+	//split
 	uploadedDriveItem, err = client.DriveItems.UploadNewFileLarge(ctx, "", folderID, fileLoc, 0)
 	if err != nil {
 		t.Errorf("Error: %v\n", err)
