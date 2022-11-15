@@ -145,8 +145,6 @@ func (c *Client) NewSessionFileUploadRequest(absoluteUrl string, grandOffset, gr
 		preliminaryLength = preliminaryRange - grandOffset + 1
 	}
 	req.Header.Set("Content-Range", fmt.Sprintf("bytes %d-%d/%d", preliminaryLength, preliminaryRange, grandTotalSize))
-	//debug
-	fmt.Println("Content-Range:" + req.Header.Get("Content-Range"))
 
 	return req, err
 
