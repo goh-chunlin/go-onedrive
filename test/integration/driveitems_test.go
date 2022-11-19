@@ -7,21 +7,19 @@ package integration
 import (
 	"fmt"
 	"testing"
-
-	"github.com/goh-chunlin/go-onedrive/onedrive"
 )
 
 func TestDriveItems_GetItemsInDefaultDriveRoot(t *testing.T) {
-	ctx, client := setup()
-
-	driveItems, err := client.DriveItems.List(ctx, "")
-	if err != nil {
-		t.Errorf("Error: %v\n", err)
-		return
-	}
-	for _, driveItem := range driveItems.DriveItems {
-		fmt.Printf("Results: %v\n", driveItem.Name)
-	}
+	//ctx, client := setup()
+	//
+	//driveItems, err := client.DriveItems.List(ctx, "")
+	//if err != nil {
+	//	t.Errorf("Error: %v\n", err)
+	//	return
+	//}
+	//for _, driveItem := range driveItems.DriveItems {
+	//	fmt.Printf("Results: %v\n", driveItem.Name)
+	//}
 }
 
 func TestDriveItems_GetItemsInSpecificFolder(t *testing.T) {
@@ -38,28 +36,28 @@ func TestDriveItems_GetItemsInSpecificFolder(t *testing.T) {
 }
 
 func TestDriveItems_GetMusicFolder(t *testing.T) {
-	ctx, client := setup()
-
-	musicDriveItem, err := client.DriveItems.GetSpecial(ctx, onedrive.Music)
-	if err != nil {
-		t.Errorf("Error: %v\n", err)
-		return
-	}
-	fmt.Printf("Music DriveItem Name: %v\n", musicDriveItem.Name)
-	fmt.Printf("Music DriveItem Id: %v\n", musicDriveItem.Id)
+	//ctx, client := setup()
+	//
+	//musicDriveItem, err := client.DriveItems.GetSpecial(ctx, onedrive.Music)
+	//if err != nil {
+	//	t.Errorf("Error: %v\n", err)
+	//	return
+	//}
+	//fmt.Printf("Music DriveItem Name: %v\n", musicDriveItem.Name)
+	//fmt.Printf("Music DriveItem Id: %v\n", musicDriveItem.Id)
 }
 
 func TestDriveItems_GetItemsInMusicFolder(t *testing.T) {
-	ctx, client := setup()
-
-	musicDriveItems, err := client.DriveItems.ListSpecial(ctx, onedrive.Music)
-	if err != nil {
-		t.Errorf("Error: %v\n", err)
-		return
-	}
-	for _, driveItem := range musicDriveItems.DriveItems {
-		fmt.Printf("Results: %v\n", driveItem.Name)
-	}
+	//ctx, client := setup()
+	//
+	//musicDriveItems, err := client.DriveItems.ListSpecial(ctx, onedrive.Music)
+	//if err != nil {
+	//	t.Errorf("Error: %v\n", err)
+	//	return
+	//}
+	//for _, driveItem := range musicDriveItems.DriveItems {
+	//	fmt.Printf("Results: %v\n", driveItem.Name)
+	//}
 }
 
 func TestDriveItems_CreateNewFolders(t *testing.T) {
@@ -165,4 +163,26 @@ func TestDriveItems_UploadFileAndReplace(t *testing.T) {
 	// 	return
 	// }
 	// fmt.Printf("Uploaded DriveItem: %v\n", uploadedDriveItem)
+}
+
+func TestDriveItems_UploadNewFileLarge(t *testing.T) {
+	ctx, client := setup()
+	folderID := ""
+	fileLoc := ""
+	//split a large file by 1280 KiB (3*320 KiB) and upload to upload session, unlimited total size
+	//recommended: 5-10 mb
+	uploadedDriveItem, err := client.DriveItems.UploadNewFileLarge(ctx, "", folderID, fileLoc, 320*1024*16)
+	if err != nil {
+		t.Errorf("Error: %v\n", err)
+		return
+	}
+	//upload a large file without splitting (can handle file <60MB)
+	fmt.Printf("Uploaded DriveItem: %v\n", uploadedDriveItem)
+	//split
+	uploadedDriveItem, err = client.DriveItems.UploadNewFileLarge(ctx, "", folderID, fileLoc, 0)
+	if err != nil {
+		t.Errorf("Error: %v\n", err)
+		return
+	}
+	fmt.Printf("Uploaded DriveItem: %v\n", uploadedDriveItem)
 }

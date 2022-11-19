@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -120,6 +121,33 @@ func (c *Client) NewFileUploadRequest(relativeURL string, contentType string, fi
 	req.Header.Set("Content-Type", contentType)
 
 	return req, err
+}
+
+// NewSessionFileUploadRequest creates an API request to upload files to an upload session. A relative URL can be provided in relativeURL,
+// in which case it is resolved relative to the BaseURL of the Client.
+// Absolute URLs should always be specified WITHOUT a preceding slash.
+// See: https://learn.microsoft.com/en-us/onedrive/developer/rest-api/api/driveitem_createuploadsession?view=odsp-graph-online#upload-bytes-to-the-upload-session
+func (c *Client) NewSessionFileUploadRequest(absoluteUrl string, grandOffset, grandTotalSize int64, byteReader *bytes.Reader) (*http.Request, error) {
+	//only basic check for sessionUpload url.
+	apiUrl, err := c.BaseURL.Parse(absoluteUrl)
+	if err != nil {
+		return nil, err
+	}
+	absoluteUrl = apiUrl.String()
+	// Create a new request using http
+	contentLength := byteReader.Size()
+	req, err := http.NewRequest("PUT", absoluteUrl, byteReader)
+	req.Header.Set("Content-Length", strconv.FormatInt(contentLength, 10))
+	preliminaryLength := grandOffset
+	preliminaryRange := grandOffset + contentLength - 1
+	if preliminaryRange >= grandTotalSize {
+		preliminaryRange = grandTotalSize - 1
+		preliminaryLength = preliminaryRange - grandOffset + 1
+	}
+	req.Header.Set("Content-Range", fmt.Sprintf("bytes %d-%d/%d", preliminaryLength, preliminaryRange, grandTotalSize))
+
+	return req, err
+
 }
 
 // NewRequest creates an API request to OneDrive API directly with an absolute URL.

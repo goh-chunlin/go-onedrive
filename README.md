@@ -101,6 +101,7 @@ Hence, API methods will likely be implemented in the order that they are needed 
 	- [x] List share links of an item
     - [x] Upload simple item size < 4MB
     - [x] Upload and then replace with item size < 4MB
+    - [x] Upload large item without additional retry attempts
 
 ## Sensei Projects ##
 
