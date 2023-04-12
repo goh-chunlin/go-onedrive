@@ -37,6 +37,7 @@ type DriveItem struct {
 	Id          string           `json:"id"`
 	DownloadURL string           `json:"@microsoft.graph.downloadUrl"`
 	Description string           `json:"description"`
+	Size        int64            `json:"size"`
 	WebURL      string           `json:"webUrl"`
 	Audio       *OneDriveAudio   `json:"audio"`
 	Video       *OneDriveVideo   `json:"video"`
